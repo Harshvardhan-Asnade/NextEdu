@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Bot, BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid } from 'lucide-react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 import { AttendanceModule } from '@/components/dashboard/attendance-module';
-import { Chatbot } from '@/components/dashboard/chatbot';
 import { DashboardOverview } from '@/components/dashboard/dashboard-overview';
 import { ExamModule } from '@/components/dashboard/exam-module';
 import { FeesModule } from '@/components/dashboard/fees-module';
@@ -169,14 +168,6 @@ export default function DashboardPage() {
         </Sheet>
         
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-end">
-           {userRole === 'student' && (
-            <Chatbot>
-              <Button variant="outline" size="icon">
-                <Bot className="h-5 w-5" />
-                <span className="sr-only">Open Chatbot</span>
-              </Button>
-            </Chatbot>
-          )}
           <div className="ml-auto flex-initial">
              <DropdownMenu>
               <DropdownMenuTrigger asChild>
