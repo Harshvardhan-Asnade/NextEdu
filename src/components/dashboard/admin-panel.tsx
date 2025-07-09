@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -349,7 +350,7 @@ export function AdminPanel() {
                                         </div>
                                     </TableCell>
                                     <TableCell>{teacher.department}</TableCell>
-                                    <TableCell>{teacher.subjects.join(', ')}</TableCell>
+                                    <TableCell>{(teacher.subjects || []).join(', ')}</TableCell>
                                     <TableCell className="text-right space-x-1">
                                         <Button variant="ghost" size="icon" onClick={() => openDialog('edit', 'teacher', teacher)}>
                                             <Edit className="h-4 w-4 text-muted-foreground hover:text-foreground" />
@@ -411,3 +412,5 @@ export function AdminPanel() {
         </div>
     );
 }
+
+    
