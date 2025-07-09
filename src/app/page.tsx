@@ -43,7 +43,6 @@ const Illustration = () => (
 export default function ModernLoginPage() {
     const [role, setRole] = useState('student');
     const [isLoading, setIsLoading] = useState(false);
-    const [secretCode, setSecretCode] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -60,9 +59,9 @@ export default function ModernLoginPage() {
             let loginSuccess = false;
 
             if (role === 'admin') {
-                if (secretCode === 'adminlogin' && password === 'admin') {
+                if (username === 'admin' && password === 'admin') {
                     loginSuccess = true;
-                    userToLogin = { role: 'admin', name: 'Admin', password: 'admin' }; 
+                    userToLogin = { role: 'admin', name: 'Admin', password: 'admin', avatar: 'https://placehold.co/100x100.png' }; 
                 } else {
                     setError('Invalid Admin credentials. Please try again.');
                 }
@@ -91,6 +90,9 @@ export default function ModernLoginPage() {
                 router.push('/dashboard');
             } else {
                 setIsLoading(false);
+                if (!error) {
+                    setError('Invalid username or password.');
+                }
             }
         }, 1500);
     };
@@ -111,7 +113,7 @@ export default function ModernLoginPage() {
                         </p>
                     </div>
 
-                    <Tabs defaultValue="student" onValueChange={(newRole) => { setRole(newRole); setError(''); setUsername(''); setPassword(''); setSecretCode(''); }} className="w-full">
+                    <Tabs defaultValue="student" onValueChange={(newRole) => { setRole(newRole); setError(''); setUsername(''); setPassword(''); }} className="w-full">
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value="student">Student</TabsTrigger>
                             <TabsTrigger value="faculty">Faculty</TabsTrigger>
@@ -120,29 +122,19 @@ export default function ModernLoginPage() {
                     </Tabs>
 
                     <form className="space-y-4" onSubmit={handleLogin}>
-                        {role === 'admin' ? (
-                            <div className="space-y-2">
-                                <Label htmlFor="secret-code">Admin Username</Label>
+                        <div className="space-y-2">
+                            <Label htmlFor="username">
+                                {role === 'admin' ? 'Admin Username' : (role === 'student' ? 'Username or Enrollment No.' : 'Username or Faculty ID')}
+                            </Label>
+                            {role === 'admin' ? (
                                 <div className="relative">
-                                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="secret-code"
-                                        type="text"
-                                        value={secretCode}
-                                        onChange={(e) => setSecretCode(e.target.value)}
-                                        required
-                                        placeholder="Enter admin username"
-                                        disabled={isLoading}
-                                        className="pl-10 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20"
-                                    />
+                                     <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                     <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder="Enter admin username" disabled={isLoading} className="pl-10 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="space-y-2">
-                                <Label htmlFor="username">{role === 'student' ? 'Username or Enrollment No.' : 'Username or Faculty ID'}</Label>
+                            ) : (
                                 <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder={role === 'student' ? 'e.g. aarav.patel or STU-001' : 'e.g. meera.iyer or FAC-001'} disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
-                            </div>
-                        )}
+                            )}
+                        </div>
                         
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>

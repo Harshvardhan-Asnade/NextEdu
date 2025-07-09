@@ -51,9 +51,8 @@ export function FacultyDashboard() {
 
     useEffect(() => {
         // Initialize local attendance state from the global student list
-        // Taking a slice for demonstration purposes
         setAttendanceList(
-            allStudents.slice(0, 8).map(student => ({ ...student, present: Math.random() > 0.2 }))
+            allStudents.map(student => ({ ...student, present: Math.random() > 0.2 }))
         );
     }, [allStudents]);
 
@@ -165,12 +164,18 @@ export function FacultyDashboard() {
                                 <DialogTrigger asChild>
                                     <Button className='w-full mt-4' variant="outline">Take Full Attendance</Button>
                                 </DialogTrigger>
-                                <DialogContent className="glass-card">
+                                <DialogContent className="glass-card max-w-2xl">
                                     <DialogHeader><DialogTitle>Mark Attendance for CS-301</DialogTitle></DialogHeader>
-                                    <div className="max-h-[60vh] overflow-y-auto space-y-4 p-1">
+                                    <div className="max-h-[60vh] overflow-y-auto space-y-2 p-1 grid grid-cols-1 md:grid-cols-2 gap-2">
                                         {attendanceList.map((student, index) => (
                                             <div key={student.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent">
-                                                <Label htmlFor={`att-${student.id}`}>{student.name}</Label>
+                                                <Label htmlFor={`att-${student.id}`} className="flex items-center gap-2">
+                                                    <Avatar className="h-6 w-6">
+                                                        <AvatarImage src={student.avatar} data-ai-hint="student portrait" />
+                                                        <AvatarFallback>{student.name.split(' ').map((n:string) => n[0]).join('')}</AvatarFallback>
+                                                    </Avatar>
+                                                    {student.name}
+                                                </Label>
                                                 <Switch id={`att-${student.id}`} checked={student.present} onCheckedChange={(checked) => {
                                                     const newStudents = [...attendanceList];
                                                     newStudents[index].present = checked;
@@ -192,29 +197,31 @@ export function FacultyDashboard() {
                             <CardDescription>Overview of active assignments.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                             <Table>
-                                <TableHeader>
-                                    <TableRow><TableHead>Title</TableHead><TableHead className='text-right'>Submissions</TableHead></TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {assignments.map((a) => (
-                                        <TableRow key={a.id}>
-                                            <TableCell>
-                                                <div className="font-medium">{a.title}</div>
-                                                <div className="text-xs text-muted-foreground">Due: {a.due}</div>
-                                            </TableCell>
-                                            <TableCell className='text-right'>
-                                                <div className="flex items-center justify-end">
-                                                    <span className="font-mono">{a.submissions}</span>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 ml-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteAssignment(a.id)}>
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                             <div className="max-h-60 overflow-y-auto pr-2">
+                                 <Table>
+                                    <TableHeader>
+                                        <TableRow><TableHead>Title</TableHead><TableHead className='text-right'>Submissions</TableHead></TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {assignments.map((a) => (
+                                            <TableRow key={a.id}>
+                                                <TableCell>
+                                                    <div className="font-medium">{a.title}</div>
+                                                    <div className="text-xs text-muted-foreground">Due: {a.due}</div>
+                                                </TableCell>
+                                                <TableCell className='text-right'>
+                                                    <div className="flex items-center justify-end">
+                                                        <span className="font-mono">{a.submissions}</span>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 ml-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteAssignment(a.id)}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                             </div>
                              <Dialog>
                                 <DialogTrigger asChild><Button className='w-full mt-4' variant="outline">Create New Assignment</Button></DialogTrigger>
                                 <DialogContent className="glass-card">
