@@ -20,8 +20,8 @@
     --accent-foreground: 220.9 39.3% 11%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 355.7 100% 97.3%;
-    --border: 220 13% 80%;
-    --input: 220 13% 80%;
+    --border: 224 71.4% 4.1%;
+    --input: 224 71.4% 4.1%;
     --ring: 221 83% 60%;
     --radius: 0.8rem;
     --chart-1: 12 76% 61%;
@@ -80,11 +80,11 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/10 backdrop-blur-xl rounded-2xl shadow-md;
+    @apply bg-card/10 backdrop-blur-xl rounded-2xl shadow-sm;
     transition: all 0.3s ease-in-out;
   }
   .glass-card:hover {
-    @apply transform scale-[1.02] shadow-2xl shadow-primary/20;
+    @apply transform scale-[1.02] shadow-lg shadow-primary/20;
   }
   .btn-gradient {
     @apply text-white bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 transition-all;
