@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hexagon } from 'lucide-react';
+import { Hexagon, LogIn } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -18,6 +18,20 @@ export default function LoginPage() {
     e.preventDefault();
     router.push('/dashboard');
   };
+
+  const getRoleDetails = (selectedRole: string) => {
+    switch (selectedRole) {
+      case 'admin':
+        return { label: 'Employee ID', placeholder: 'e.g., ADM123' };
+      case 'faculty':
+        return { label: 'Faculty ID', placeholder: 'e.g., FAC456' };
+      case 'student':
+      default:
+        return { label: 'Enrollment Number', placeholder: 'e.g., FD2021034' };
+    }
+  };
+
+  const { label, placeholder } = getRoleDetails(role);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
@@ -33,7 +47,7 @@ export default function LoginPage() {
               <span className="sr-only">Nexus Dashboard</span>
             </Link>
           <CardTitle className="text-2xl">Welcome to Nexus</CardTitle>
-          <CardDescription>Enter your credentials to access your dashboard</CardDescription>
+          <CardDescription>Select your role and sign in to continue</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4 px-6">
@@ -45,13 +59,14 @@ export default function LoginPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="faculty">Faculty</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="username">{role === 'student' ? 'Enrollment Number' : 'Employee ID'}</Label>
-              <Input id="username" type="text" placeholder={role === 'student' ? 'e.g., FD2021034' : 'e.g., EMP123'} required />
+              <Label htmlFor="username">{label}</Label>
+              <Input id="username" type="text" placeholder={placeholder} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -59,7 +74,10 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="px-6 pb-6">
-            <Button type="submit" className="w-full">Sign In</Button>
+            <Button type="submit" className="w-full">
+              <LogIn className="mr-2" />
+              Sign In
+            </Button>
           </CardFooter>
         </form>
       </Card>
