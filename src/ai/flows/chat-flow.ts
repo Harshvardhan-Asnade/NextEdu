@@ -40,13 +40,13 @@ const MessageSchema = z.object({
   content: z.string(),
 });
 
-export const ChatInputSchema = z.object({
+const ChatInputSchema = z.object({
   history: z.array(MessageSchema),
   question: z.string(),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 
-export const ChatOutputSchema = z.object({
+const ChatOutputSchema = z.object({
   answer: z.string(),
 });
 export type ChatOutput = z.infer<typeof ChatOutputSchema>;
