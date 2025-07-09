@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -133,7 +134,7 @@ export const feeData = {
 };
 
 const tomHollandAcademicHistory = {
-    attendance: generateRandomHistory(4).attendance, // Use random attendance
+    attendance: generateRandomHistory(4).attendance,
     results: {
         sem1: {
             session: "May 2023",
@@ -170,11 +171,10 @@ const tomHollandAcademicHistory = {
 
 const tomHollandFeeData = {
     summary: [
-        { head: "Tuition Fee", toPay: 125000, paid: 125000, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
+        { head: "Tuition Fee", toPay: 125000, paid: 122500, inProcess: 0, outstanding: 2500, dueDate: "10-07-2024" },
         { head: "Exam Fee", toPay: 2500, paid: 0, inProcess: 0, outstanding: 2500, dueDate: "25-07-2024" },
         { head: "Library Fee", toPay: 500, paid: 500, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
         { head: "Hostel Fee", toPay: 40000, paid: 40000, inProcess: 0, outstanding: 0, dueDate: "05-07-2024" },
-        { head: "Mess Fee", toPay: 2500, paid: 0, inProcess: 0, outstanding: 2500, dueDate: "05-07-2024" },
     ],
     history: feeData.history
 };
@@ -241,24 +241,54 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [students, setStudents] = useState<Student[]>(() => {
         if (typeof window === 'undefined') return initialStudents;
+        let loadedStudents: Student[] = [];
         try {
             const item = window.localStorage.getItem('students');
-            return item ? JSON.parse(item) : initialStudents;
+            // Use initialStudents as a fallback if localStorage is empty or parsing fails
+            loadedStudents = item ? JSON.parse(item) : initialStudents;
         } catch (error) {
             console.error(error);
-            return initialStudents;
+            loadedStudents = initialStudents;
         }
+
+        const demoStudent = initialStudents.find(s => s.id === 'STU-DEMO');
+        
+        // Ensure demo student is always present and up-to-date
+        if (demoStudent) {
+            const existingDemoIndex = loadedStudents.findIndex(s => s.id === 'STU-DEMO');
+            if (existingDemoIndex !== -1) {
+                loadedStudents[existingDemoIndex] = demoStudent; // Update in place
+            } else {
+                loadedStudents.unshift(demoStudent); // Add if not present
+            }
+        }
+        
+        return loadedStudents;
     });
 
     const [teachers, setTeachers] = useState<Teacher[]>(() => {
         if (typeof window === 'undefined') return initialTeachers;
+        let loadedTeachers: Teacher[] = [];
         try {
             const item = window.localStorage.getItem('teachers');
-            return item ? JSON.parse(item) : initialTeachers;
+            loadedTeachers = item ? JSON.parse(item) : initialTeachers;
         } catch (error) {
             console.error(error);
-            return initialTeachers;
+            loadedTeachers = initialTeachers;
         }
+
+        const demoTeacher = initialTeachers.find(t => t.id === 'FAC-DEMO');
+
+        if (demoTeacher) {
+            const existingDemoIndex = loadedTeachers.findIndex(t => t.id === 'FAC-DEMO');
+            if (existingDemoIndex !== -1) {
+                loadedTeachers[existingDemoIndex] = demoTeacher; // Update
+            } else {
+                loadedTeachers.unshift(demoTeacher); // Add
+            }
+        }
+        
+        return loadedTeachers;
     });
 
     const [pendingStudents, setPendingStudents] = useState<PendingStudent[]>(() => {
