@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -213,7 +214,13 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                                                     </DropdownMenu>
                                                 </TableCell>
                                             </TableRow>
-                                        )) : <p className="text-sm text-center text-muted-foreground p-4">No students assigned yet.</p>}
+                                        )) : (
+                                            <TableRow>
+                                                <TableCell colSpan={2} className="text-center text-muted-foreground p-4">
+                                                    No students assigned yet.
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -381,3 +388,5 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
         </div>
     );
 }
+
+    
