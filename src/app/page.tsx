@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
-import { Shield } from 'lucide-react';
+import { Key, Shield } from 'lucide-react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useUser } from '@/context/UserContext';
 
@@ -96,6 +96,22 @@ export default function ModernLoginPage() {
             }
         }, 1500);
     };
+
+    const handleDemoLogin = () => {
+        setIsLoading(true);
+        setError('');
+        const demoStudent = students.find(s => s.id === 'STU-DEMO');
+        
+        if (demoStudent) {
+             setTimeout(() => {
+                localStorage.setItem('loggedInUser', JSON.stringify({ ...demoStudent, role: 'student' }));
+                router.push('/dashboard');
+            }, 1000);
+        } else {
+            setError('Demo user not found. Please contact support.');
+            setIsLoading(false);
+        }
+    };
     
     const welcomeText = `Welcome ${role.charAt(0).toUpperCase() + role.slice(1)}`;
 
@@ -160,14 +176,27 @@ export default function ModernLoginPage() {
                         <Button type="submit" className="w-full h-11 transition-all duration-300" disabled={isLoading}>
                             Sign In
                         </Button>
-
-                        <div className="text-center text-sm">
-                           <Button variant="link" className="p-0 h-auto" asChild>
-                             <Link href="/register">Don't have an account? Register here</Link>
-                           </Button>
-                        </div>
                         
                     </form>
+                    <div className="relative my-2">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-background px-2 text-muted-foreground">
+                                Or
+                            </span>
+                        </div>
+                    </div>
+                     <Button variant="outline" className="w-full" onClick={handleDemoLogin} disabled={isLoading}>
+                        <Key className="mr-2 h-4 w-4" />
+                        Demo Student Login
+                    </Button>
+                    <div className="text-center text-sm">
+                        <Button variant="link" className="p-0 h-auto" asChild>
+                            <Link href="/register">Don't have an account? Register here</Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div className="hidden lg:block">
