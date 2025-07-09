@@ -38,7 +38,7 @@ const initialStudyMaterials = [
 const initialAnnouncements = [
     { id: 1, by: "Dr. Rajeev Menon", content: "Reminder: The deadline for the Final Project Proposal is approaching. Please submit it via the portal by August 25th.", time: "2h ago" },
     { id: 2, by: "Dr. Meera Iyer", content: "I've uploaded the notes for today's lecture on NP-Completeness. You can find them in the study materials section.", time: "8h ago" },
-]
+];
 
 export function FacultyDashboard({ user }: { user: Teacher }) {
     const { students: allStudents } = useUser();
