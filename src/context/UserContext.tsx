@@ -252,6 +252,23 @@ const initialPendingStudents: PendingStudent[] = [
     }
 ]
 
+const initialAnnouncements: Announcement[] = [
+    {
+        id: 1,
+        by: 'Admin',
+        content: 'The final examination schedule for the current semester has been released. Please check the exam portal.',
+        time: '1 day ago',
+        scope: 'global',
+    },
+    {
+        id: 2,
+        by: 'Admin',
+        content: "The annual university hackathon 'Hack-a-Next' is scheduled for next month. Registrations are now open!",
+        time: '2 days ago',
+        scope: 'global',
+    },
+];
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -281,7 +298,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [students, setStudents] = useLocalStorage<Student[]>('students', initialStudents);
     const [teachers, setTeachers] = useLocalStorage<Teacher[]>('teachers', initialTeachers);
     const [pendingStudents, setPendingStudents] = useLocalStorage<PendingStudent[]>('pendingStudents', initialPendingStudents);
-    const [announcements, setAnnouncements] = useLocalStorage<Announcement[]>('announcements', []);
+    const [announcements, setAnnouncements] = useLocalStorage<Announcement[]>('announcements', initialAnnouncements);
     const [activityLog, setActivityLog] = useLocalStorage<Activity[]>('activityLog', []);
 
     const logActivity = (user: string, action: string) => {
