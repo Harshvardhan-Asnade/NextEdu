@@ -38,7 +38,7 @@ export function Chatbot({ children }: { children: React.ReactNode }) {
             const botMessage: Message = { id: Date.now() + 1, text: response.answer, sender: "bot" };
             setMessages(prev => [...prev, botMessage]);
         } catch (error) {
-            const errorMessage: Message = { id: Date.now() + 1, text: "Sorry, I'm having trouble connecting. Please try again later.", sender: "bot" };
+            const errorMessage: Message = { id: Date.now() + 1, text: "Sorry, I'm having trouble connecting. Please try again.", sender: "bot" };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -71,7 +71,7 @@ export function Chatbot({ children }: { children: React.ReactNode }) {
                             <AvatarFallback>NA</AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="text-sm font-medium leading-none text-left">NextEdu Assistant</p>
+                            <p className="text-sm font-medium leading-none text-left">NextEdu Chatbot</p>
                             <p className="text-sm text-muted-foreground text-left">AI Powered</p>
                         </div>
                     </div>
