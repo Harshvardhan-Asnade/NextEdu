@@ -8,7 +8,7 @@ export function LoadingScreen() {
         <h1 className="text-5xl font-bold tracking-tight">NextEdu</h1>
       </div>
       <p className="mt-4 text-center text-lg text-muted-foreground animate-pulse">
-        Next-gen education dashboard. by harshvardhan
+        Next-gen education dashboard. by Harshvardhan Asnade
       </p>
     </div>
   );
