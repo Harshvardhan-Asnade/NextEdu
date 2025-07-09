@@ -286,6 +286,13 @@ const initialAnnouncements: Announcement[] = [
         content: 'Welcome to the new NextEdu portal! We are excited to have you here.',
         time: '5 days ago',
         scope: 'global',
+    },
+    {
+        id: 6,
+        by: 'Finance Office',
+        content: 'Reminder: The deadline for fee payment for the upcoming semester is August 15th. Please pay on time to avoid late fees.',
+        time: '6 days ago',
+        scope: 'global',
     }
 ];
 
