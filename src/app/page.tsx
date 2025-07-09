@@ -5,29 +5,48 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 
 const Illustration = () => (
     <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
+        {/* Decorative shapes */}
         <div className="absolute -top-16 -left-16 w-64 h-64 bg-white/10 rounded-full animate-pulse" />
         <div className="absolute -bottom-24 -right-16 w-72 h-72 bg-white/10 rounded-full animate-pulse animation-delay-2000" />
+        
         <svg viewBox="0 0 512 512" className="relative w-full h-auto max-w-lg text-white z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M256 288c53.02 0 96-42.98 96-96s-42.98-96-96-96-96 42.98-96 96 42.98 96 96 96Z" fill="rgba(255,255,255,0.2)"/>
-            <path d="M128 416c0-57.9 46.1-104 104-104h48c57.9 0 104 46.1 104 104v16H128v-16Z" fill="rgba(255,255,255,0.2)"/>
-            <rect x="100" y="280" width="312" height="160" rx="16" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="4"/>
-            <path d="M80 440h352" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round"/>
-            <rect x="116" y="296" width="280" height="128" rx="8" fill="rgba(0,0,0,0.2)"/>
-            <path d="M80 160 120 200l-40 40" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.5s' }}/>
-            <path d="M432 160 392 200l40 40" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.7s' }}/>
-            <circle cx="90" cy="90" r="10" fill="currentColor" opacity="0.5" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
-            <circle cx="420" cy="300" r="14" fill="currentColor" opacity="0.5" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
-            <rect x="380" y="80" width="40" height="40" rx="8" stroke="currentColor" strokeWidth="8" opacity="0.5" className="animate-spin-slow"/>
-            <path d="M128 350h50" stroke="hsl(190, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.1s'}}/>
-            <path d="M128 365h80" stroke="hsl(300, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.3s'}}/>
-            <path d="M128 380h30" stroke="hsl(50, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.5s'}}/>
+            {/* Person Icon */}
+            <circle cx="256" cy="160" r="48" fill="rgba(255,255,255,0.2)"/>
+            <path d="M160 384c0-53.02 42.98-96 96-96h0c53.02 0 96 42.98 96 96V416H160V384Z" fill="rgba(255,255,255,0.2)"/>
+            
+            {/* Desk and Computer */}
+            <rect x="80" y="384" width="352" height="16" rx="8" fill="rgba(255,255,255,0.25)" />
+            <rect x="144" y="272" width="224" height="112" rx="12" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
+            <rect x="224" y="384" width="64" height="24" fill="rgba(0,0,0,0.2)" />
+            <path d="M160 384 L 160 288" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
+            <path d="M352 384 L 352 288" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
+
+
+            {/* Floating tech icons */}
+            <g className="animate-pulse" style={{ animationDelay: '0.5s' }}>
+                <path d="M96 128L80 144l16 16" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+                <path d="m112 144 16-16" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+            </g>
+            
+            <g className="animate-pulse" style={{ animationDelay: '0.7s' }}>
+                <path d="M416 192a24 24 0 1 0 0-48 24 24 0 0 0 0 48Z" stroke="currentColor" strokeWidth="6" opacity="0.6"/>
+                <path d="M416 156v24m-12-12h24" stroke="currentColor" strokeWidth="6" opacity="0.6"/>
+            </g>
+
+            <rect x="80" y="240" width="32" height="32" rx="8" stroke="currentColor" strokeWidth="6" opacity="0.5" className="animate-spin-slow"/>
+
+            <circle cx="432" cy="300" r="16" fill="currentColor" opacity="0.4" className="animate-pulse" style={{animationDelay: '0.2s'}} />
+            <circle cx="432" cy="300" r="8" fill="rgba(0,0,0,0.2)" />
+
+            {/* background elements */}
+            <path d="M384 80L352 48L320 80" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" className="animate-pulse" />
         </svg>
     </div>
 );
@@ -94,12 +113,6 @@ export default function ModernLoginPage() {
                             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Sign In'}
                         </Button>
                         
-                        <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                                Sign up
-                            </Link>
-                        </div>
                     </form>
                 </div>
             </div>
