@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,22 +15,12 @@ import { Separator } from '../ui/separator';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
+import { useUser } from '@/context/UserContext';
 
 const initialUpcomingClasses = [
     { time: "10:00 AM - 11:00 AM", subject: "Advanced Algorithms", class: "CS-301", type: "Theory" },
     { time: "11:00 AM - 12:00 PM", subject: "Database Systems", class: "CS-302", type: "Theory" },
     { time: "01:00 PM - 03:00 PM", subject: "Web Development Lab", class: "CS-303L", type: "Practical" },
-];
-
-const initialStudentList = [
-    { id: "STU-001", name: "Aarav Patel", present: true },
-    { id: "STU-002", name: "Aditi Sharma", present: true },
-    { id: "STU-003", name: "Arjun Kumar", present: false },
-    { id: "STU-004", name: "Diya Singh", present: true },
-    { id: "STU-005", name: "Ishaan Gupta", present: true },
-    { id: "STU-006", name: "Kavya Reddy", present: true },
-    { id: "STU-007", name: "Mohammed Khan", present: true },
-    { id: "STU-008", name: "Myra Desai", present: false },
 ];
 
 const initialAssignments = [
@@ -51,12 +41,21 @@ const initialAnnouncements = [
 ]
 
 export function FacultyDashboard() {
+    const { students: allStudents } = useUser();
     const { toast } = useToast();
     const [assignments, setAssignments] = useState(initialAssignments);
     const [studyMaterials, setStudyMaterials] = useState(initialStudyMaterials);
     const [announcements, setAnnouncements] = useState(initialAnnouncements);
     const [newAnnouncement, setNewAnnouncement] = useState("");
-    const [students, setStudents] = useState(initialStudentList);
+    const [attendanceList, setAttendanceList] = useState<any[]>([]);
+
+    useEffect(() => {
+        // Initialize local attendance state from the global student list
+        // Taking a slice for demonstration purposes
+        setAttendanceList(
+            allStudents.slice(0, 8).map(student => ({ ...student, present: Math.random() > 0.2 }))
+        );
+    }, [allStudents]);
 
     const handlePostAnnouncement = () => {
         if (!newAnnouncement.trim()) return;
@@ -88,7 +87,7 @@ export function FacultyDashboard() {
             id: Date.now(),
             title: formData.get('title') as string,
             due: formData.get('due') as string,
-            submissions: '0/46'
+            submissions: `0/${allStudents.length}`
         };
         setAssignments([...assignments, newAssignment]);
         toast({ title: "Assignment Created", description: `The assignment "${newAssignment.title}" has been created.` });
@@ -153,7 +152,7 @@ export function FacultyDashboard() {
                             <div className="max-h-60 overflow-y-auto pr-2">
                                 <Table>
                                     <TableBody>
-                                        {students.slice(0, 4).map((s) => (
+                                        {attendanceList.slice(0, 4).map((s) => (
                                             <TableRow key={s.id}>
                                                 <TableCell className="font-medium">{s.name}</TableCell>
                                                 <TableCell className='text-right'><Badge variant={s.present ? 'outline' : 'destructive'} className={s.present ? 'text-success border-success' : ''}>{s.present ? 'Present' : 'Absent'}</Badge></TableCell>
@@ -169,13 +168,13 @@ export function FacultyDashboard() {
                                 <DialogContent className="glass-card">
                                     <DialogHeader><DialogTitle>Mark Attendance for CS-301</DialogTitle></DialogHeader>
                                     <div className="max-h-[60vh] overflow-y-auto space-y-4 p-1">
-                                        {students.map((student, index) => (
+                                        {attendanceList.map((student, index) => (
                                             <div key={student.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent">
                                                 <Label htmlFor={`att-${student.id}`}>{student.name}</Label>
                                                 <Switch id={`att-${student.id}`} checked={student.present} onCheckedChange={(checked) => {
-                                                    const newStudents = [...students];
+                                                    const newStudents = [...attendanceList];
                                                     newStudents[index].present = checked;
-                                                    setStudents(newStudents);
+                                                    setAttendanceList(newStudents);
                                                 }} />
                                             </div>
                                         ))}

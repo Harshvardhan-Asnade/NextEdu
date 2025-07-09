@@ -20,8 +20,9 @@ import { useToast } from '@/hooks/use-toast';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { cn } from '@/lib/utils';
 import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
+import { UserProvider } from '@/context/UserContext';
 
-export default function DashboardPage() {
+function DashboardLayout() {
   const [activeView, setActiveView] = useState('dashboard');
   const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
@@ -211,5 +212,13 @@ export default function DashboardPage() {
       
       {userRole === 'student' && <Chatbot />}
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <UserProvider>
+      <DashboardLayout />
+    </UserProvider>
   );
 }
