@@ -13,11 +13,17 @@ const feeSummary = [
     { head: "Tuition Fee", toPay: 2500, paid: 2500, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
     { head: "Exam Fee", toPay: 500, paid: 0, inProcess: 0, outstanding: 500, dueDate: "25-07-2024" },
     { head: "Library Fee", toPay: 100, paid: 100, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
+    { head: "Hostel Fee", toPay: 1200, paid: 1200, inProcess: 0, outstanding: 0, dueDate: "05-07-2024" },
+    { head: "Transport Fee", toPay: 300, paid: 300, inProcess: 0, outstanding: 0, dueDate: "05-07-2024" },
 ];
 
 const transactionHistory = [
     { date: "08-07-2024", year: "2024-25", sem: 3, mode: "Card", amount: 2600, status: "Success", txnId: "T2024070812345" },
+    { date: "04-07-2024", year: "2024-25", sem: 3, mode: "Netbanking", amount: 1500, status: "Success", txnId: "T2024070409876" },
     { date: "15-01-2024", year: "2023-24", sem: 2, mode: "UPI", amount: 2600, status: "Success", txnId: "T2024011509876" },
+    { date: "10-01-2024", year: "2023-24", sem: 2, mode: "Card", amount: 1500, status: "Success", txnId: "T2024011012345" },
+    { date: "09-08-2023", year: "2023-24", sem: 1, mode: "Card", amount: 2600, status: "Success", txnId: "T2023080954321" },
+    { date: "05-08-2023", year: "2023-24", sem: 1, mode: "UPI", amount: 1500, status: "Success", txnId: "T2023080567890" },
 ];
 
 export function FeesModule() {
@@ -61,9 +67,9 @@ export function FeesModule() {
                             {feeSummary.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{item.head}</TableCell>
-                                    <TableCell>${item.toPay}</TableCell>
-                                    <TableCell className="text-success">${item.paid}</TableCell>
-                                    <TableCell className={item.outstanding > 0 ? "text-destructive" : ""}>${item.outstanding}</TableCell>
+                                    <TableCell>${item.toPay.toFixed(2)}</TableCell>
+                                    <TableCell className="text-success">${item.paid.toFixed(2)}</TableCell>
+                                    <TableCell className={item.outstanding > 0 ? "text-destructive" : ""}>${item.outstanding.toFixed(2)}</TableCell>
                                     <TableCell>{item.dueDate}</TableCell>
                                 </TableRow>
                             ))}
@@ -76,7 +82,7 @@ export function FeesModule() {
                         </div>
                         <Dialog>
                             <DialogTrigger asChild>
-                               <Button className="bg-primary/80 hover:bg-primary text-white">
+                               <Button className="bg-primary/80 hover:bg-primary text-white" disabled={totalOutstanding <= 0}>
                                     <CreditCard className="mr-2 h-4 w-4"/> Pay Now
                                 </Button>
                             </DialogTrigger>
@@ -123,7 +129,7 @@ export function FeesModule() {
                                     <TableCell>{txn.year}</TableCell>
                                     <TableCell>{txn.sem}</TableCell>
                                     <TableCell>{txn.mode}</TableCell>
-                                    <TableCell>${txn.amount}</TableCell>
+                                    <TableCell>${txn.amount.toFixed(2)}</TableCell>
                                     <TableCell><Badge className={txn.status === 'Success' ? 'bg-success/20 text-success border-success/20' : ''} variant="outline">{txn.status}</Badge></TableCell>
                                     <TableCell>{txn.txnId}</TableCell>
                                 </TableRow>

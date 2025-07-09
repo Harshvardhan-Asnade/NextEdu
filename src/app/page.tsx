@@ -34,7 +34,7 @@ export default function LoginPage() {
   const { label, placeholder } = getRoleDetails(role);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex items-center justify-center min-h-screen bg-background animate-in fade-in duration-1000">
       <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
 
       <Card className="w-full max-w-sm glass-card animate-in fade-in-0 zoom-in-95 duration-500">

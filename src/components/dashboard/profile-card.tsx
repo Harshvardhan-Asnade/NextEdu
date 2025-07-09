@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, Download } from "lucide-react";
+import { Download, Bell } from "lucide-react";
 
 export function ProfileCard() {
     return (
@@ -21,8 +21,8 @@ export function ProfileCard() {
                     <CardTitle className="text-2xl">Alex Doe</CardTitle>
                     <CardDescription>Enrollment No: FD2021034</CardDescription>
                 </div>
-                <div className="flex gap-2">
-                     <Badge variant="secondary">B.Tech CSE</Badge>
+                <div className="flex gap-2 flex-wrap justify-center">
+                     <Badge variant="secondary">B.Tech CSE (AI/ML)</Badge>
                      <Badge variant="secondary">Sem 3</Badge>
                 </div>
             </CardHeader>
@@ -47,17 +47,11 @@ export function ProfileCard() {
                     <span className="font-medium">+1 098 765 432</span>
                 </div>
                 <Separator className="my-3" />
-                <div className="p-3 rounded-lg bg-destructive/10 text-destructive flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5" />
-                    <div>
-                        <p className="font-bold">Attendance Warning</p>
-                        <p className="text-xs">Overall attendance is at 74%</p>
-                    </div>
-                </div>
-                <Separator className="my-3" />
-                <div className="flex items-center justify-between">
-                    <label htmlFor="mobile-app" className="font-medium">Mobile App Activation</label>
-                    <Switch id="mobile-app" />
+                 <div className="flex items-center justify-between">
+                    <label htmlFor="notifications" className="font-medium flex items-center gap-2">
+                        <Bell className="h-4 w-4" /> Push Notifications
+                    </label>
+                    <Switch id="notifications" defaultChecked />
                 </div>
             </CardContent>
             <CardFooter className="p-6 pt-0">

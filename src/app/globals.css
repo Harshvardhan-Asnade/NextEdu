@@ -76,6 +76,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  @keyframes background-pan {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
   .dark body {
      background-color: hsl(var(--background));
      background-image:
@@ -83,15 +96,17 @@
         radial-gradient(ellipse 80% 50% at 10% 110%, hsl(220 70% 50% / 0.15), transparent),
         radial-gradient(ellipse 80% 50% at 90% 110%, hsl(280 70% 50% / 0.15), transparent);
      background-attachment: fixed;
+     background-size: 200% 200%;
+     animation: background-pan 45s ease-in-out infinite;
   }
 }
 
 @layer components {
   .glass-card {
     @apply bg-card/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-black/20;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
   .glass-card:hover {
-    @apply transform scale-[1.02] border-primary/50 shadow-primary/20;
+    @apply transform scale-[1.02] border-primary/50 shadow-2xl shadow-primary/20;
   }
 }
