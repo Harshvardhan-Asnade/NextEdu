@@ -246,6 +246,7 @@ export function AdminPanel() {
                                     <TableHead>Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Course</TableHead>
+                                    <TableHead>Password</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -264,6 +265,7 @@ export function AdminPanel() {
                                         </TableCell>
                                         <TableCell>{student.email}</TableCell>
                                         <TableCell>{student.course}</TableCell>
+                                        <TableCell>{student.password}</TableCell>
                                         <TableCell className="text-right space-x-1">
                                             <Button variant="ghost" size="icon" onClick={() => openDialog('edit', 'student', student)}>
                                                 <Edit className="h-4 w-4 text-muted-foreground hover:text-foreground" />
@@ -298,6 +300,7 @@ export function AdminPanel() {
                                 <TableHead>Name</TableHead>
                                 <TableHead>Email</TableHead>
                                 <TableHead>Department</TableHead>
+                                <TableHead>Password</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -316,6 +319,7 @@ export function AdminPanel() {
                                     </TableCell>
                                     <TableCell>{teacher.email}</TableCell>
                                     <TableCell>{teacher.department}</TableCell>
+                                    <TableCell>{teacher.password}</TableCell>
                                     <TableCell className="text-right space-x-1">
                                         <Button variant="ghost" size="icon" onClick={() => openDialog('edit', 'teacher', teacher)}>
                                             <Edit className="h-4 w-4 text-muted-foreground hover:text-foreground" />

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { generateRandomHistory } from '@/lib/utils';
 
 export interface PendingStudent {
@@ -169,7 +169,6 @@ const initialPendingStudents: PendingStudent[] = [
         state: 'Maharashtra',
         username: 'priya.chauhan',
         password: 'password123',
-        confirmPassword: 'password123',
         agreeTerms: true,
     }
 ]
@@ -177,9 +176,67 @@ const initialPendingStudents: PendingStudent[] = [
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [students, setStudents] = useState<Student[]>(initialStudents);
-    const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
-    const [pendingStudents, setPendingStudents] = useState<PendingStudent[]>(initialPendingStudents);
+    const [students, setStudents] = useState<Student[]>(() => {
+        if (typeof window === 'undefined') return initialStudents;
+        try {
+            const item = window.localStorage.getItem('students');
+            return item ? JSON.parse(item) : initialStudents;
+        } catch (error) {
+            console.error(error);
+            return initialStudents;
+        }
+    });
+
+    const [teachers, setTeachers] = useState<Teacher[]>(() => {
+        if (typeof window === 'undefined') return initialTeachers;
+        try {
+            const item = window.localStorage.getItem('teachers');
+            return item ? JSON.parse(item) : initialTeachers;
+        } catch (error) {
+            console.error(error);
+            return initialTeachers;
+        }
+    });
+
+    const [pendingStudents, setPendingStudents] = useState<PendingStudent[]>(() => {
+        if (typeof window === 'undefined') return initialPendingStudents;
+        try {
+            const item = window.localStorage.getItem('pendingStudents');
+            if (item) {
+                const parsed = JSON.parse(item);
+                // JSON serializes Date objects to strings, so we need to parse them back.
+                return parsed.map((p: any) => ({...p, dob: p.dob ? new Date(p.dob) : undefined }));
+            }
+            return initialPendingStudents;
+        } catch (error) {
+            console.error(error);
+            return initialPendingStudents;
+        }
+    });
+
+    useEffect(() => {
+        try {
+            window.localStorage.setItem('students', JSON.stringify(students));
+        } catch (error) {
+            console.error('Failed to save students to localStorage', error);
+        }
+    }, [students]);
+
+    useEffect(() => {
+        try {
+            window.localStorage.setItem('teachers', JSON.stringify(teachers));
+        } catch (error) {
+            console.error('Failed to save teachers to localStorage', error);
+        }
+    }, [teachers]);
+
+    useEffect(() => {
+        try {
+            window.localStorage.setItem('pendingStudents', JSON.stringify(pendingStudents));
+        } catch (error) {
+            console.error('Failed to save pending students to localStorage', error);
+        }
+    }, [pendingStudents]);
 
     return (
         <UserContext.Provider value={{ students, setStudents, teachers, setTeachers, pendingStudents, setPendingStudents }}>
