@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Shield } from 'lucide-react';
 
 const Illustration = () => (
     <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
@@ -54,13 +54,35 @@ const Illustration = () => (
 export default function ModernLoginPage() {
     const [role, setRole] = useState('student');
     const [isLoading, setIsLoading] = useState(false);
+    const [secretCode, setSecretCode] = useState('');
+    const [error, setError] = useState('');
     const router = useRouter();
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
+
         setTimeout(() => {
-            router.push('/dashboard');
+            let loginSuccess = false;
+            if (role === 'admin') {
+                if (secretCode === 'adminlogin') {
+                    loginSuccess = true;
+                } else {
+                    setError('Invalid Admin Secret Code. Please try again.');
+                }
+            } else {
+                loginSuccess = true; // Auto-login for students and faculty
+            }
+
+            if (loginSuccess) {
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('userRole', role);
+                }
+                router.push('/dashboard');
+            } else {
+                setIsLoading(false);
+            }
         }, 1500);
     };
     
@@ -75,7 +97,7 @@ export default function ModernLoginPage() {
                             {welcomeText}
                         </h1>
                         <p className="mt-2 text-center text-sm text-muted-foreground">
-                            Sign in to your dashboard
+                            {role === 'admin' ? 'Enter the secret code to access the admin panel' : 'Sign in to your dashboard'}
                         </p>
                     </div>
 
@@ -88,26 +110,51 @@ export default function ModernLoginPage() {
                     </Tabs>
 
                     <form className="space-y-4" onSubmit={handleLogin}>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email address</Label>
-                            <Input id="email" name="email" type="email" autoComplete="email" required placeholder="name@example.com" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input id="password" name="password" type="password" autoComplete="current-password" required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center gap-2">
-                                <Checkbox id="remember-me" name="remember-me" disabled={isLoading} />
-                                <Label htmlFor="remember-me" className="text-muted-foreground font-normal">
-                                    Remember me
-                                </Label>
+                        {role === 'admin' ? (
+                            <div className="space-y-2">
+                                <Label htmlFor="secret-code">Admin Secret Code</Label>
+                                <div className="relative">
+                                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                    <Input
+                                        id="secret-code"
+                                        type="password"
+                                        value={secretCode}
+                                        onChange={(e) => setSecretCode(e.target.value)}
+                                        required
+                                        placeholder="Enter secret code"
+                                        disabled={isLoading}
+                                        className="pl-10 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20"
+                                    />
+                                </div>
                             </div>
-                            <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                                Forgot password?
-                            </Link>
-                        </div>
+                        ) : (
+                            <>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email address</Label>
+                                    <Input id="email" name="email" type="email" autoComplete="email" required placeholder="name@example.com" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input id="password" name="password" type="password" autoComplete="current-password" required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                                </div>
+                            </>
+                        )}
+                        
+                        {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+
+                        {role !== 'admin' && (
+                            <div className="flex items-center justify-between text-sm">
+                                <div className="flex items-center gap-2">
+                                    <Checkbox id="remember-me" name="remember-me" disabled={isLoading} />
+                                    <Label htmlFor="remember-me" className="text-muted-foreground font-normal">
+                                        Remember me
+                                    </Label>
+                                </div>
+                                <Link href="#" className="font-medium text-primary hover:text-primary/90">
+                                    Forgot password?
+                                </Link>
+                            </div>
+                        )}
                         
                         <Button type="submit" className="w-full h-11 transition-all duration-300" disabled={isLoading}>
                             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Sign In'}

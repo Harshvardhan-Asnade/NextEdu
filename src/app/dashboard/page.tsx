@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react';
-import { BarChart3, Bot, CreditCard, GraduationCap, Hexagon, Home as HomeIcon, LogOut, PanelLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, Home as HomeIcon, LogOut, PanelLeft, Shield } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -18,13 +18,29 @@ import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { AdminPanel } from '@/components/dashboard/admin-panel';
+import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
+  const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    if (role) {
+      setUserRole(role);
+      if (role === 'admin') {
+        setActiveView('admin');
+      }
+    } else {
+      router.push('/');
+    }
+  }, [router]);
+
   const handleLogout = () => {
+    localStorage.removeItem('userRole');
     router.push('/');
   };
 
@@ -38,17 +54,27 @@ export default function DashboardPage() {
         return <ExamModule />;
       case 'fees':
         return <FeesModule />;
+      case 'admin':
+        return userRole === 'admin' ? <AdminPanel /> : <DashboardOverview />;
       default:
         return <DashboardOverview />;
     }
   };
 
-  const navItems = [
+  const baseNavItems = [
     { id: 'dashboard', label: 'Dashboard', icon: HomeIcon },
     { id: 'attendance', label: 'Attendance', icon: BarChart3 },
     { id: 'exam', label: 'Exam', icon: GraduationCap },
     { id: 'fees', label: 'Fees', icon: CreditCard },
   ];
+
+  const adminNavItem = { id: 'admin', label: 'Admin Panel', icon: Shield };
+
+  const navItems = userRole === 'admin' ? [adminNavItem, ...baseNavItems.filter(item => item.id !== 'dashboard')] : baseNavItems;
+
+  if (!userRole) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  }
 
   return (
     <TooltipProvider>
@@ -146,7 +172,7 @@ export default function DashboardPage() {
                 </nav>
               </SheetContent>
             </Sheet>
-            <h1 className="text-xl font-semibold capitalize">{activeView}</h1>
+            <h1 className="text-xl font-semibold capitalize">{activeView === 'admin' ? 'Admin Panel' : activeView}</h1>
             <div className="ml-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -156,8 +182,8 @@ export default function DashboardPage() {
                     className="overflow-hidden rounded-full"
                   >
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="Student Avatar" data-ai-hint="student portrait" />
-                        <AvatarFallback>AD</AvatarFallback>
+                        <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : 'student portrait'} />
+                        <AvatarFallback>{userRole === 'admin' ? 'AD' : 'SD'}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -173,15 +199,20 @@ export default function DashboardPage() {
             </div>
           </header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+            <div className={cn(
+              "grid auto-rows-max items-start gap-4 md:gap-8",
+              userRole === 'admin' ? "lg:col-span-3" : "lg:col-span-2"
+            )}>
               {renderContent()}
             </div>
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
-              <ProfileCard />
-            </div>
+            {userRole !== 'admin' && (
+              <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
+                <ProfileCard />
+              </div>
+            )}
           </main>
         </div>
-        <Chatbot />
+        {userRole !== 'admin' && <Chatbot />}
       </div>
     </TooltipProvider>
   );
