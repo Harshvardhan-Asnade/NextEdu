@@ -3,7 +3,7 @@
 import { chatbotStudentQueries } from "@/ai/flows/chatbot-student-queries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ interface Message {
 
 export function Chatbot({ children }: { children: React.ReactNode }) {
     const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hello! I am the NextEdu assistant. How can I help you today regarding admissions, exams, or fees?", sender: "bot" }
+        { id: 1, text: "Hello! I'm the NextEdu assistant. Ask me about admissions, exams, or fees.", sender: "bot" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,7 @@ export function Chatbot({ children }: { children: React.ReactNode }) {
             const botMessage: Message = { id: Date.now() + 1, text: response.answer, sender: "bot" };
             setMessages(prev => [...prev, botMessage]);
         } catch (error) {
-            const errorMessage: Message = { id: Date.now() + 1, text: "I'm having trouble connecting to the AI service. This could be due to a missing or invalid API key. Please check your configuration.", sender: "bot" };
+            const errorMessage: Message = { id: Date.now() + 1, text: "Sorry, I'm having trouble connecting. Please try again.", sender: "bot" };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -65,14 +65,16 @@ export function Chatbot({ children }: { children: React.ReactNode }) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] glass-card p-0 flex flex-col h-[70vh]">
                 <DialogHeader className="p-4 pb-0">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-start space-x-4">
                         <Avatar>
                             <AvatarImage src="https://placehold.co/40x40.png" alt="Bot Avatar" data-ai-hint="robot" />
                             <AvatarFallback>NA</AvatarFallback>
                         </Avatar>
-                        <div>
-                            <p className="text-sm font-medium leading-none text-left">NextEdu Chatbot</p>
-                            <p className="text-sm text-muted-foreground text-left">AI Powered</p>
+                        <div className="space-y-1">
+                            <DialogTitle className="text-left">NextEdu Chatbot</DialogTitle>
+                            <DialogDescription className="text-left">
+                                AI Powered. Ask me about admissions, exams, or fees.
+                            </DialogDescription>
                         </div>
                     </div>
                 </DialogHeader>
