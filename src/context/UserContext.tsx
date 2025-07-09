@@ -211,6 +211,7 @@ const initialStudents: Student[] = initialStudentsRaw.map(student => {
 
 
 const initialTeachers: Teacher[] = [
+    { id: "FAC-DEMO", name: "Dr. Anthony Stark", email: "tony.stark@university.edu", department: "Robotics & AI", avatar: "https://placehold.co/100x100.png", username: 'tony.stark', password: 'demo' },
     { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science", avatar: "https://placehold.co/100x100.png?text=MI", username: 'meera.iyer', password: 'password' },
     { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence", avatar: "https://placehold.co/100x100.png?text=RM", username: 'rajeev.menon', password: 'password' },
     { id: "FAC-003", name: "Prof. Sunita Sharma", email: "sunita.sharma@university.edu", department: "Machine Learning", avatar: "https://placehold.co/100x100.png?text=SS", username: 'sunita.sharma', password: 'password' },

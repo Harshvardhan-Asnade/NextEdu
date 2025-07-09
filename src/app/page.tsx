@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
-import { Key, Shield } from 'lucide-react';
+import { Key, Shield, Briefcase } from 'lucide-react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useUser } from '@/context/UserContext';
 
@@ -112,6 +112,22 @@ export default function ModernLoginPage() {
             setIsLoading(false);
         }
     };
+
+    const handleFacultyDemoLogin = () => {
+        setIsLoading(true);
+        setError('');
+        const demoFaculty = teachers.find(t => t.id === 'FAC-DEMO');
+        
+        if (demoFaculty) {
+             setTimeout(() => {
+                localStorage.setItem('loggedInUser', JSON.stringify({ ...demoFaculty, role: 'faculty' }));
+                router.push('/dashboard');
+            }, 1000);
+        } else {
+            setError('Demo faculty user not found. Please contact support.');
+            setIsLoading(false);
+        }
+    };
     
     const welcomeText = `Welcome ${role.charAt(0).toUpperCase() + role.slice(1)}`;
 
@@ -184,15 +200,21 @@ export default function ModernLoginPage() {
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
                             <span className="bg-background px-2 text-muted-foreground">
-                                Or
+                                Or try a demo login
                             </span>
                         </div>
                     </div>
-                     <Button variant="outline" className="w-full" onClick={handleDemoLogin} disabled={isLoading}>
-                        <Key className="mr-2 h-4 w-4" />
-                        Demo Student Login
-                    </Button>
-                    <div className="text-center text-sm">
+                     <div className="grid grid-cols-2 gap-4">
+                        <Button variant="outline" className="w-full" onClick={handleDemoLogin} disabled={isLoading}>
+                            <Key className="mr-2 h-4 w-4" />
+                            Demo Student
+                        </Button>
+                        <Button variant="outline" className="w-full" onClick={handleFacultyDemoLogin} disabled={isLoading}>
+                            <Briefcase className="mr-2 h-4 w-4" />
+                            Demo Faculty
+                        </Button>
+                    </div>
+                    <div className="text-center text-sm mt-4">
                         <Button variant="link" className="p-0 h-auto" asChild>
                             <Link href="/register">Don't have an account? Register here</Link>
                         </Button>
