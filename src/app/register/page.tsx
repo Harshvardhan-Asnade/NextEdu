@@ -28,7 +28,6 @@ export default function StudentRegistrationPage() {
         studentMobile: '',
         parentMobile: '',
         email: '',
-        enrollmentNumber: '',
         programName: '',
         section: '',
         city: '',
@@ -59,7 +58,7 @@ export default function StudentRegistrationPage() {
     const handleReset = () => {
         setFormData({
             fullName: '', dob: undefined, gender: '', profilePhoto: null,
-            studentMobile: '', parentMobile: '', email: '', enrollmentNumber: '',
+            studentMobile: '', parentMobile: '', email: '',
             programName: '', section: '', city: '', state: '',
             username: '', password: '', confirmPassword: '', agreeTerms: false,
         });
@@ -166,9 +165,9 @@ export default function StudentRegistrationPage() {
                         {step === 2 && (
                              <div className="space-y-4 animate-in fade-in-50">
                                 <h3 className="font-semibold">Academic & Contact Details</h3>
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div className="space-y-2"><Label htmlFor="email">Email ID</Label><Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required /></div>
-                                    <div className="space-y-2"><Label htmlFor="enrollmentNumber">Enrollment Number</Label><Input id="enrollmentNumber" name="enrollmentNumber" value={formData.enrollmentNumber} onChange={handleInputChange} required /></div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email ID</Label>
+                                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
                                 </div>
                                 <div className="grid md:grid-cols-2 gap-4">
                                     <div className="space-y-2"><Label htmlFor="programName">Program Name</Label><Input id="programName" name="programName" value={formData.programName} onChange={handleInputChange} required /></div>
