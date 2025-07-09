@@ -22,7 +22,7 @@
     --destructive-foreground: 355.7 100% 97.3%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 256.1 47.3% 52%;
+    --ring: 221 83% 60%;
     --radius: 0.8rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -54,11 +54,42 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 28% 17%;
     --input: 215 28% 17%;
-    --ring: 256.1 47.3% 52%;
+    --ring: 221 83% 60%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --success: 142.1 76.2% 46.3%;
+    --success-foreground: 210 20% 98%;
+    --warning: 47.9 95.8% 53.1%;
+    --warning-foreground: 240 5% 25%;
+  }
+
+  .violet {
+    --background: 257 52% 12%;
+    --foreground: 257 30% 92%;
+    --card: 257 40% 18%;
+    --card-foreground: 257 30% 92%;
+    --popover: 257 52% 12%;
+    --popover-foreground: 257 30% 92%;
+    --primary: 257 80% 68%;
+    --primary-foreground: 257 52% 12%;
+    --secondary: 257 30% 25%;
+    --secondary-foreground: 257 30% 92%;
+    --muted: 257 30% 25%;
+    --muted-foreground: 257 20% 65%;
+    --accent: 257 30% 25%;
+    --accent-foreground: 257 30% 92%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 86% 97%;
+    --border: 257 30% 25%;
+    --input: 257 30% 25%;
+    --ring: 257 80% 75%;
+    --chart-1: 257 70% 50%;
+    --chart-2: 280 60% 45%;
+    --chart-3: 300 80% 55%;
+    --chart-4: 250 65% 60%;
     --chart-5: 340 75% 55%;
     --success: 142.1 76.2% 46.3%;
     --success-foreground: 210 20% 98%;
@@ -80,10 +111,16 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-black/20;
+    @apply bg-card/10 backdrop-blur-xl rounded-2xl shadow-md;
     transition: all 0.3s ease-in-out;
   }
   .glass-card:hover {
-    @apply transform scale-[1.02] border-primary/50 shadow-2xl shadow-primary/20;
+    @apply transform scale-[1.02] shadow-2xl shadow-primary/20;
+  }
+  .btn-gradient {
+    @apply text-white bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 transition-all;
+  }
+  .btn-gradient:hover {
+    @apply scale-105;
   }
 }

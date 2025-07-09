@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Key, Shield, Briefcase } from 'lucide-react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useUser } from '@/context/UserContext';
+import { cn } from '@/lib/utils';
 
 const Illustration = () => (
     <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
@@ -161,16 +162,16 @@ export default function ModernLoginPage() {
                             {role === 'admin' ? (
                                 <div className="relative">
                                      <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                     <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder="Enter admin username" disabled={isLoading} className="pl-10 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                                     <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder="Enter admin username" disabled={isLoading} className="pl-10" />
                                 </div>
                             ) : (
-                                <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder={role === 'student' ? 'e.g. aarav.patel or STU-001' : 'e.g. meera.iyer or FAC-001'} disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                                <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder={role === 'student' ? 'e.g. aarav.patel or STU-001' : 'e.g. meera.iyer or FAC-001'} disabled={isLoading} />
                             )}
                         </div>
                         
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                            <Input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" disabled={isLoading} />
                         </div>
                         
                         {error && <p className="text-sm font-medium text-destructive">{error}</p>}
@@ -189,7 +190,7 @@ export default function ModernLoginPage() {
                             </div>
                         )}
                         
-                        <Button type="submit" className="w-full h-11 transition-all duration-300" disabled={isLoading}>
+                        <Button type="submit" className={cn("w-full h-11", role !== 'admin' && 'btn-gradient')} disabled={isLoading}>
                             Sign In
                         </Button>
                         
