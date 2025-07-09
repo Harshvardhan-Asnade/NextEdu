@@ -38,7 +38,7 @@ export function Chatbot({ children }: { children: React.ReactNode }) {
             const botMessage: Message = { id: Date.now() + 1, text: response.answer, sender: "bot" };
             setMessages(prev => [...prev, botMessage]);
         } catch (error) {
-            const errorMessage: Message = { id: Date.now() + 1, text: "Sorry, I'm having trouble connecting. Please try again.", sender: "bot" };
+            const errorMessage: Message = { id: Date.now() + 1, text: "I'm having trouble connecting to the AI service. This could be due to a missing or invalid API key. Please check your configuration.", sender: "bot" };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
