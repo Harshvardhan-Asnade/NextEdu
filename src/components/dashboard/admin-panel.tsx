@@ -111,7 +111,7 @@ export function AdminPanel() {
             name: pendingStudent.fullName,
             email: pendingStudent.email,
             course: pendingStudent.programName,
-            avatar: pendingStudent.profilePhoto ? URL.createObjectURL(pendingStudent.profilePhoto) : `https://placehold.co/100x100.png?text=${pendingStudent.fullName.split(' ').map(n=>n[0]).join('')}`,
+            avatar: pendingStudent.profilePhoto || `https://placehold.co/100x100.png?text=${pendingStudent.fullName.split(' ').map(n=>n[0]).join('')}`,
             dob: pendingStudent.dob ? format(pendingStudent.dob, 'dd-MM-yyyy') : 'N/A',
             gender: pendingStudent.gender,
             section: pendingStudent.section,

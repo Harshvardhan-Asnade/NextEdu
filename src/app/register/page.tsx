@@ -24,7 +24,7 @@ export default function StudentRegistrationPage() {
         fullName: '',
         dob: undefined as Date | undefined,
         gender: '',
-        profilePhoto: null as File | null,
+        profilePhoto: null as string | null,
         studentMobile: '',
         parentMobile: '',
         email: '',
@@ -51,8 +51,13 @@ export default function StudentRegistrationPage() {
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFormData(prev => ({ ...prev, profilePhoto: e.target.files![0] }));
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, profilePhoto: reader.result as string }));
+            };
+            reader.readAsDataURL(file);
         }
     };
     

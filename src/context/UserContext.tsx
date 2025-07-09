@@ -7,7 +7,7 @@ export interface PendingStudent {
     fullName: string;
     dob: Date | undefined;
     gender: string;
-    profilePhoto: File | null;
+    profilePhoto: string | null;
     studentMobile: string;
     parentMobile: string;
     email: string;
