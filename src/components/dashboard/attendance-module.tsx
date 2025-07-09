@@ -9,43 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, Download } from "lucide-react";
 import { MonthViewChart } from "./charts";
-
-const allSemestersData = {
-  "sem1": {
-    subjects: [
-      { name: "Mathematics I", type: "Theory", conducted: 60, present: 55, absent: 5 },
-      { name: "Physics", type: "Theory", conducted: 60, present: 58, absent: 2 },
-      { name: "Basic Electrical Engg.", type: "Practical", conducted: 40, present: 35, absent: 5 },
-      { name: "Problem Solving with C", type: "Theory", conducted: 60, present: 52, absent: 8 },
-      { name: "Engineering Graphics", type: "Practical", conducted: 30, present: 28, absent: 2 },
-    ],
-    overall: 90.74
-  },
-  "sem2": {
-    subjects: [
-      { name: "Mathematics II", type: "Theory", conducted: 60, present: 54, absent: 6 },
-      { name: "Chemistry", type: "Theory", conducted: 60, present: 51, absent: 9 },
-      { name: "Data Structures", type: "Practical", conducted: 40, present: 39, absent: 1 },
-      { name: "Object Oriented Prog.", type: "Theory", conducted: 60, present: 57, absent: 3 },
-    ],
-    overall: 91.50
-  },
-  "sem3": {
-    subjects: [
-      { name: "Advanced Algorithms", type: "Theory", conducted: 60, present: 52, absent: 8 },
-      { name: "Database Systems", type: "Theory", conducted: 60, present: 56, absent: 4 },
-      { name: "Web Development", type: "Practical", conducted: 40, present: 37, absent: 3 },
-      { name: "Operating Systems", type: "Theory", conducted: 60, present: 49, absent: 11 },
-      { name: "Intro to AI/ML", type: "Theory", conducted: 30, present: 28, absent: 2 },
-    ],
-    overall: 88.46
-  },
-  "sem4": { subjects: [], overall: "N/A" },
-  "sem5": { subjects: [], overall: "N/A" },
-  "sem6": { subjects: [], overall: "N/A" },
-  "sem7": { subjects: [], overall: "N/A" },
-  "sem8": { subjects: [], overall: "N/A" },
-};
+import type { Student } from "@/context/UserContext";
 
 const calculatePercentage = (present: number, conducted: number) => {
     return conducted > 0 ? ((present / conducted) * 100).toFixed(2) : "0.00";
@@ -57,9 +21,10 @@ const getPercentageColor = (percentage: number) => {
     return "text-success";
 };
 
-export function AttendanceModule() {
-    const [activeSem, setActiveSem] = useState("sem3");
+export function AttendanceModule({ user }: { user: Student }) {
     const { toast } = useToast();
+    const allSemestersData = user.academicHistory.attendance;
+    const [activeSem, setActiveSem] = useState(`sem${user.semester-1}`);
 
     const handleDownload = () => {
         toast({
@@ -67,17 +32,10 @@ export function AttendanceModule() {
             description: "Your attendance report is being generated and will download shortly.",
         });
     };
-
-    const currentSemData = allSemestersData[activeSem as keyof typeof allSemestersData];
-    const subjects = currentSemData.subjects;
-
-    const totalConducted = subjects.reduce((sum, s) => sum + s.conducted, 0);
-    const totalPresent = subjects.reduce((sum, s) => sum + s.present, 0);
-    const totalAbsent = totalConducted - totalPresent;
-    const overallPercentage = parseFloat(calculatePercentage(totalPresent, totalConducted));
-
+    
     const renderContent = () => {
-        if (subjects.length === 0) {
+        const currentSemData = allSemestersData[activeSem as keyof typeof allSemestersData];
+        if (!currentSemData || currentSemData.subjects.length === 0) {
             return (
                 <Card className="glass-card mt-4">
                     <CardHeader>
@@ -87,6 +45,12 @@ export function AttendanceModule() {
                 </Card>
             );
         }
+        
+        const subjects = currentSemData.subjects;
+        const totalConducted = subjects.reduce((sum, s) => sum + s.conducted, 0);
+        const totalPresent = subjects.reduce((sum, s) => sum + s.present, 0);
+        const totalAbsent = totalConducted - totalPresent;
+        const overallPercentage = parseFloat(calculatePercentage(totalPresent, totalConducted));
 
         return (
             <div key={activeSem} className="animate-in fade-in-50 duration-500">
@@ -199,6 +163,10 @@ export function AttendanceModule() {
             </div>
         );
     }
+    
+    if (!allSemestersData) return <p>Loading attendance data...</p>;
+    
+    const availableSems = Object.keys(allSemestersData);
 
     return (
         <div className="space-y-4">
@@ -210,10 +178,10 @@ export function AttendanceModule() {
                 </AlertDescription>
             </Alert>
             
-            <Tabs defaultValue="sem3" onValueChange={setActiveSem}>
+            <Tabs defaultValue={activeSem} onValueChange={setActiveSem}>
                 <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 gap-1">
-                    {Object.entries(allSemestersData).map(([semKey, data]) => (
-                        <TabsTrigger key={semKey} value={semKey} disabled={data.overall === "N/A"}>
+                    {Array.from({ length: 8 }, (_, i) => `sem${i + 1}`).map((semKey) => (
+                        <TabsTrigger key={semKey} value={semKey} disabled={!availableSems.includes(semKey)}>
                             Sem {semKey.replace('sem', '')}
                         </TabsTrigger>
                     ))}

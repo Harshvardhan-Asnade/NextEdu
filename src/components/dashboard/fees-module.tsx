@@ -8,27 +8,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, CreditCard } from "lucide-react";
+import type { Student } from "@/context/UserContext";
 
-const feeSummary = [
-    { head: "Tuition Fee", toPay: 125000, paid: 125000, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
-    { head: "Exam Fee", toPay: 2500, paid: 0, inProcess: 0, outstanding: 2500, dueDate: "25-07-2024" },
-    { head: "Library Fee", toPay: 500, paid: 500, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
-    { head: "Hostel Fee", toPay: 40000, paid: 40000, inProcess: 0, outstanding: 0, dueDate: "05-07-2024" },
-    { head: "Transport Fee", toPay: 10000, paid: 10000, inProcess: 0, outstanding: 0, dueDate: "05-07-2024" },
-];
-
-const transactionHistory = [
-    { date: "08-07-2024", year: "2024-25", sem: 3, mode: "Card", amount: 125500, status: "Success", txnId: "T2024070812345" },
-    { date: "04-07-2024", year: "2024-25", sem: 3, mode: "Netbanking", amount: 50000, status: "Success", txnId: "T2024070409876" },
-    { date: "15-01-2024", year: "2023-24", sem: 2, mode: "UPI", amount: 125500, status: "Success", txnId: "T2024011509876" },
-    { date: "10-01-2024", year: "2023-24", sem: 2, mode: "Card", amount: 50000, status: "Success", txnId: "T2024011012345" },
-    { date: "09-08-2023", year: "2023-24", sem: 1, mode: "Card", amount: 125500, status: "Success", txnId: "T2023080954321" },
-    { date: "05-08-2023", year: "2023-24", sem: 1, mode: "UPI", amount: 50000, status: "Success", txnId: "T2023080567890" },
-];
-
-export function FeesModule() {
-    const totalOutstanding = feeSummary.reduce((sum, item) => sum + item.outstanding, 0);
+export function FeesModule({ user }: { user: Student }) {
     const { toast } = useToast();
+    const { summary: feeSummary, history: transactionHistory } = user.fees;
+    
+    const totalOutstanding = feeSummary.reduce((sum, item) => sum + item.outstanding, 0);
 
     const handlePayNow = (method: string) => {
         toast({

@@ -1,14 +1,8 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Line, LineChart, Cell } from "recharts";
+import type { AttendanceSubject } from "@/context/UserContext";
 
-const subjectAttendanceData = [
-    { name: "Algorithms", percentage: 83.33 },
-    { name: "Databases", percentage: 91.67 },
-    { name: "Web Dev", percentage: 95.00 },
-    { name: "OS", percentage: 66.67 },
-    { name: "Project Mgmt", percentage: 96.67 },
-];
 
 const monthAttendanceData = [
     { name: "Jan", percentage: 85 },
@@ -40,6 +34,7 @@ const gradeColors = [
 const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const isGradeChart = payload[0].payload.count !== undefined;
+      const isAttendanceChart = payload[0].payload.percentage !== undefined;
 
       return (
         <div className="rounded-lg border bg-background/80 backdrop-blur-sm p-2 shadow-sm">
@@ -51,7 +46,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
               <span className="font-bold text-muted-foreground">
                 {isGradeChart 
                     ? `${payload[0].value} Students`
-                    : `${payload[0].value}%`
+                    : isAttendanceChart
+                    ? `${payload[0].value}%`
+                    : ''
                 }
               </span>
             </div>
@@ -63,11 +60,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 
-export function AttendanceChart() {
+export function AttendanceChart({ attendanceData }: { attendanceData: AttendanceSubject[] }) {
+    const chartData = attendanceData.map(subject => ({
+        name: subject.name.split(' ').map(w => w[0]).join(''),
+        percentage: subject.conducted > 0 ? parseFloat(((subject.present / subject.conducted) * 100).toFixed(2)) : 0
+    }));
+
     return (
         <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={subjectAttendanceData}>
+                <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
                     <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}%`} />

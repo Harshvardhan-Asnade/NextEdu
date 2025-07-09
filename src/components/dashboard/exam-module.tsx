@@ -8,52 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2, Download, XCircle } from "lucide-react";
+import type { Student } from '@/context/UserContext';
 
-const allResultsData = {
-  "sem1": {
-    session: "May 2023",
-    results: [
-      { code: "MA101", name: "Mathematics I", credits: 4, grade: "B" },
-      { code: "PH101", name: "Physics", credits: 4, grade: "A" },
-      { code: "EE101", name: "Basic Electrical Engg.", credits: 3, grade: "B+" },
-      { code: "CS101", name: "Problem Solving with C", credits: 4, grade: "A+" },
-      { code: "ME101", name: "Engineering Graphics", credits: 3, grade: "C" },
-    ],
-    summary: { sgpa: "8.10", cgpa: "8.10", backlogs: 0, status: "Passed" }
-  },
-  "sem2": {
-    session: "December 2023",
-    results: [
-      { code: "MA201", name: "Mathematics II", credits: 4, grade: "A" },
-      { code: "CH201", name: "Chemistry", credits: 4, grade: "A+" },
-      { code: "CS201", name: "Data Structures", credits: 4, grade: "A" },
-      { code: "CS202", name: "Object Oriented Prog.", credits: 4, grade: "B+" },
-    ],
-    summary: { sgpa: "9.10", cgpa: "8.60", backlogs: 0, status: "Passed" }
-  },
-  "sem3": {
-    session: "May 2024",
-    results: [
-      { code: "CS301", name: "Advanced Algorithms", credits: 4, grade: "A" },
-      { code: "CS302", name: "Database Systems", credits: 4, grade: "A+" },
-      { code: "CS303", name: "Web Development", credits: 3, grade: "A" },
-      { code: "CS304", name: "Operating Systems", credits: 4, grade: "B+" },
-      { code: "AI301", name: "Intro to AI/ML", credits: 3, grade: "A" },
-    ],
-    summary: { sgpa: "8.90", cgpa: "8.75", backlogs: 0, status: "Passed" }
-  },
-  "sem4": { session: "December 2024", results: [], summary: null },
-  "sem5": { session: "May 2025", results: [], summary: null },
-  "sem6": { session: "December 2025", results: [], summary: null },
-  "sem7": { session: "May 2026", results: [], summary: null },
-  "sem8": { session: "December 2026", results: [], summary: null },
-};
-
-export function ExamModule() {
-    const [activeSem, setActiveSem] = useState("sem3");
+export function ExamModule({ user }: { user: Student }) {
     const { toast } = useToast();
-
-    const currentData = allResultsData[activeSem as keyof typeof allResultsData];
+    const allResultsData = user.academicHistory.results;
+    const [activeSem, setActiveSem] = useState(`sem${user.semester - 1}`);
 
     const handleDownload = () => {
         toast({
@@ -63,7 +23,9 @@ export function ExamModule() {
     };
 
     const renderContent = () => {
-        if (!currentData.summary) {
+        const currentData = allResultsData[activeSem as keyof typeof allResultsData];
+
+        if (!currentData || !currentData.summary) {
             return (
                 <Card className="glass-card mt-4">
                     <CardHeader>
@@ -111,8 +73,8 @@ export function ExamModule() {
                     <Card className="glass-card">
                         <CardHeader><CardTitle>Result Summary</CardTitle></CardHeader>
                         <CardContent className="grid grid-cols-2 gap-4">
-                            <div><p className="text-sm text-muted-foreground">Seat Number</p><p className="font-semibold">FD2021034</p></div>
-                            <div><p className="text-sm text-muted-foreground">Name</p><p className="font-semibold">Alex Doe</p></div>
+                            <div><p className="text-sm text-muted-foreground">Enrollment No.</p><p className="font-semibold">{user.id}</p></div>
+                            <div><p className="text-sm text-muted-foreground">Name</p><p className="font-semibold">{user.name}</p></div>
                             <div><p className="text-sm text-muted-foreground">Current Backlogs</p><p className="font-semibold">{currentData.summary.backlogs}</p></div>
                             <div><p className="text-sm text-muted-foreground">Total Backlogs</p><p className="font-semibold">0</p></div>
                             <div><p className="text-sm text-muted-foreground">SGPA</p><p className="font-semibold text-primary">{currentData.summary.sgpa}</p></div>
@@ -141,7 +103,10 @@ export function ExamModule() {
             </div>
         );
     }
-    
+
+    if (!allResultsData) return <p>Loading exam data...</p>;
+    const availableSems = Object.keys(allResultsData);
+
     return (
         <div className="space-y-4">
             <Card className="glass-card">
@@ -150,14 +115,14 @@ export function ExamModule() {
                         <CardTitle>Exam Results</CardTitle>
                         <CardDescription>View your performance in past examinations.</CardDescription>
                     </div>
-                    <Select defaultValue="sem3" onValueChange={setActiveSem}>
+                    <Select defaultValue={activeSem} onValueChange={setActiveSem}>
                         <SelectTrigger className="w-[250px]">
                             <SelectValue placeholder="Select Exam Session" />
                         </SelectTrigger>
                         <SelectContent>
-                            {Object.entries(allResultsData).map(([semKey, data]) => (
+                            {availableSems.map((semKey) => (
                                 <SelectItem key={semKey} value={semKey}>
-                                    Semester {semKey.replace('sem', '')} ({data.session})
+                                    Semester {semKey.replace('sem', '')} ({allResultsData[semKey].session})
                                 </SelectItem>
                             ))}
                         </SelectContent>

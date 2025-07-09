@@ -48,20 +48,22 @@ export default function DashboardPage() {
   const userRole = user?.role;
 
   const renderContent = () => {
+    if (!user) return null;
+
     if (userRole === 'faculty') return <FacultyDashboard />;
     if (userRole === 'admin') return <AdminPanel />;
 
     switch (activeView) {
       case 'dashboard':
-        return <DashboardOverview />;
+        return <DashboardOverview user={user} />;
       case 'attendance':
-        return <AttendanceModule />;
+        return <AttendanceModule user={user} />;
       case 'exam':
-        return <ExamModule />;
+        return <ExamModule user={user} />;
       case 'fees':
-        return <FeesModule />;
+        return <FeesModule user={user} />;
       default:
-        return <DashboardOverview />;
+        return <DashboardOverview user={user}/>;
     }
   };
 
