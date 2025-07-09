@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid, Bell } from 'lucide-react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid, Bell, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -100,7 +101,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-transparent animate-in fade-in duration-500">
+    <div className="flex min-h-screen w-full flex-col bg-transparent">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-xl px-4 md:px-6 z-50">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link href="#" className="flex items-center gap-2 font-semibold text-lg md:text-base">
@@ -226,7 +227,7 @@ export default function DashboardPage() {
       <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className={cn(
-            "grid auto-rows-max items-start gap-4 md:gap-8",
+            "grid auto-rows-max items-start gap-4 md:gap-8 order-last lg:order-first",
             userRole === 'student' ? "lg:col-span-2" : "lg:col-span-3"
           )}>
             <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
@@ -234,7 +235,7 @@ export default function DashboardPage() {
             </div>
           </div>
           {userRole === 'student' && (
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 order-first lg:order-last">
               <ProfileCard user={user}/>
             </div>
           )}
