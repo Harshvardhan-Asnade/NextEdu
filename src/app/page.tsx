@@ -60,27 +60,27 @@ export default function ModernLoginPage() {
             let loginSuccess = false;
 
             if (role === 'admin') {
-                if (secretCode === 'adminlogin') {
+                if (secretCode === 'adminlogin' && password === 'admin') {
                     loginSuccess = true;
-                    userToLogin = { role: 'admin', name: 'Admin' }; 
+                    userToLogin = { role: 'admin', name: 'Admin', password: 'admin' }; 
                 } else {
-                    setError('Invalid Admin Secret Code. Please try again.');
+                    setError('Invalid Admin credentials. Please try again.');
                 }
             } else if (role === 'student') {
-                const foundStudent = students.find(s => s.id === username);
+                const foundStudent = students.find(s => (s.id === username || s.username === username) && s.password === password);
                 if (foundStudent) {
                     userToLogin = { ...foundStudent, role: 'student' };
                     loginSuccess = true;
                 } else {
-                    setError('Invalid Enrollment No. or you are not yet approved by the admin.');
+                    setError('Invalid credentials or your account is not yet approved by the admin.');
                 }
             } else if (role === 'faculty') {
-                const foundFaculty = teachers.find(t => t.id === username);
+                const foundFaculty = teachers.find(t => (t.id === username || t.username === username) && t.password === password);
                 if (foundFaculty) {
                     userToLogin = { ...foundFaculty, role: 'faculty' };
                     loginSuccess = true;
                 } else {
-                    setError('Invalid Faculty ID or you are not yet approved by the admin.');
+                    setError('Invalid credentials or you are not an authorized faculty member.');
                 }
             }
 
@@ -92,7 +92,7 @@ export default function ModernLoginPage() {
             } else {
                 setIsLoading(false);
             }
-        }, 2000);
+        }, 1500);
     };
     
     const welcomeText = `Welcome ${role.charAt(0).toUpperCase() + role.slice(1)}`;
@@ -107,7 +107,7 @@ export default function ModernLoginPage() {
                             {welcomeText}
                         </h1>
                         <p className="mt-2 text-center text-sm text-muted-foreground">
-                            {role === 'admin' ? 'Enter the secret code to access the admin panel' : 'Sign in to your dashboard'}
+                           Sign in to your dashboard
                         </p>
                     </div>
 
@@ -122,33 +122,32 @@ export default function ModernLoginPage() {
                     <form className="space-y-4" onSubmit={handleLogin}>
                         {role === 'admin' ? (
                             <div className="space-y-2">
-                                <Label htmlFor="secret-code">Admin Secret Code</Label>
+                                <Label htmlFor="secret-code">Admin Username</Label>
                                 <div className="relative">
                                     <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                                     <Input
                                         id="secret-code"
-                                        type="password"
+                                        type="text"
                                         value={secretCode}
                                         onChange={(e) => setSecretCode(e.target.value)}
                                         required
-                                        placeholder="Enter secret code"
+                                        placeholder="Enter admin username"
                                         disabled={isLoading}
                                         className="pl-10 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20"
                                     />
                                 </div>
                             </div>
                         ) : (
-                            <>
-                                <div className="space-y-2">
-                                    <Label htmlFor="username">{role === 'student' ? 'Enrollment No.' : 'Faculty ID'}</Label>
-                                    <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder={role === 'student' ? 'e.g. STU-001' : 'e.g. FAC-001'} disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
-                                </div>
-                            </>
+                            <div className="space-y-2">
+                                <Label htmlFor="username">{role === 'student' ? 'Username or Enrollment No.' : 'Username or Faculty ID'}</Label>
+                                <Input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder={role === 'student' ? 'e.g. aarav.patel or STU-001' : 'e.g. meera.iyer or FAC-001'} disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                            </div>
                         )}
+                        
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                        </div>
                         
                         {error && <p className="text-sm font-medium text-destructive">{error}</p>}
 

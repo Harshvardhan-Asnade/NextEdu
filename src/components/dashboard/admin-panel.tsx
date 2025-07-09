@@ -9,11 +9,14 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, UserPlus, Trash2, Edit } from "lucide-react";
-import { useUser } from "@/context/UserContext";
+import { PlusCircle, UserPlus, Trash2, Edit, UserCheck, UserX } from "lucide-react";
+import { useUser, PendingStudent, Student } from "@/context/UserContext";
+import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
 
 export function AdminPanel() {
-    const { students, setStudents, teachers, setTeachers } = useUser();
+    const { students, setStudents, teachers, setTeachers, pendingStudents, setPendingStudents } = useUser();
+    const { toast } = useToast();
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogMode, setDialogMode] = useState<'add' | 'edit'>('add');
@@ -49,14 +52,16 @@ export function AdminPanel() {
         }
         if (dialogMode === 'add') {
             const newUser = {
-                id: `${dialogType === 'student' ? 'STU' : 'FAC'}-${Math.floor(100 + Math.random() * 900)}`,
+                id: `${dialogType === 'student' ? 'STU' : 'FAC'}-${String(100 + (dialogType === 'student' ? students.length : teachers.length) + 1).slice(1)}`,
                 name: formData.name,
                 email: formData.email,
                 avatar: formData.avatar || 'https://placehold.co/40x40.png',
-                ...(dialogType === 'student' ? { course: formData.roleSpecific } : { department: formData.roleSpecific })
+                username: formData.name.toLowerCase().replace(' ', '.'),
+                password: 'password',
+                ...(dialogType === 'student' ? { course: formData.roleSpecific, semester: 1, dob: 'N/A', contact: 'N/A', parentContact: 'N/A' } : { department: formData.roleSpecific })
             };
             if (dialogType === 'student') {
-                setStudents(prev => [newUser, ...prev]);
+                setStudents(prev => [newUser as Student, ...prev]);
             } else {
                 setTeachers(prev => [newUser, ...prev]);
             }
@@ -94,6 +99,31 @@ export function AdminPanel() {
         }
         setIsAlertOpen(false);
         setUserToDelete(null);
+    };
+
+    const handleApprove = (pendingStudent: PendingStudent) => {
+        const newId = `STU-${String(100 + students.length + 1).slice(1)}`;
+        const newStudent: Student = {
+            id: newId,
+            name: pendingStudent.fullName,
+            email: pendingStudent.email,
+            course: pendingStudent.programName,
+            avatar: pendingStudent.profilePhoto ? URL.createObjectURL(pendingStudent.profilePhoto) : 'https://placehold.co/100x100.png',
+            dob: pendingStudent.dob ? format(pendingStudent.dob, 'dd-MM-yyyy') : 'N/A',
+            contact: pendingStudent.studentMobile,
+            parentContact: pendingStudent.parentMobile,
+            semester: 1,
+            username: pendingStudent.username,
+            password: pendingStudent.password
+        };
+        setStudents(prev => [newStudent, ...prev]);
+        setPendingStudents(prev => prev.filter(s => s.username !== pendingStudent.username));
+        toast({ title: "Student Approved", description: `${newStudent.name} is now an active student.` });
+    };
+
+    const handleReject = (pendingStudent: PendingStudent) => {
+        setPendingStudents(prev => prev.filter(s => s.username !== pendingStudent.username));
+        toast({ title: "Request Rejected", description: `The registration for ${pendingStudent.fullName} has been rejected.`, variant: "destructive" });
     };
 
     const renderDialog = () => (
@@ -148,6 +178,51 @@ export function AdminPanel() {
         <div className="space-y-8">
             {renderDialog()}
             {renderDeleteAlert()}
+
+            <Card className="glass-card">
+                <CardHeader>
+                    <CardTitle>Pending Student Approvals</CardTitle>
+                    <CardDescription>Review and approve new student registration requests.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="max-h-[300px] overflow-y-auto pr-2">
+                        <Table>
+                            <TableHeader className="sticky top-0 bg-card/80 backdrop-blur-sm z-10">
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Program</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {pendingStudents.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={4} className="text-center h-24">No pending requests.</TableCell>
+                                    </TableRow>
+                                ) : (
+                                    pendingStudents.map((student) => (
+                                        <TableRow key={student.username}>
+                                            <TableCell className="font-medium">{student.fullName}</TableCell>
+                                            <TableCell>{student.email}</TableCell>
+                                            <TableCell>{student.programName}</TableCell>
+                                            <TableCell className="text-right space-x-1">
+                                                <Button variant="outline" size="sm" className="border-success/50 text-success hover:bg-success hover:text-success-foreground" onClick={() => handleApprove(student)}>
+                                                    <UserCheck className="h-4 w-4 mr-1" /> Approve
+                                                </Button>
+                                                <Button variant="destructive" size="sm" onClick={() => handleReject(student)}>
+                                                    <UserX className="h-4 w-4 mr-1" /> Reject
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </CardContent>
+            </Card>
+
             <Card className="glass-card">
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>

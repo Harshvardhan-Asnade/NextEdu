@@ -15,8 +15,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useUser } from '@/context/UserContext';
 
 export default function StudentRegistrationPage() {
     const [step, setStep] = useState(1);
@@ -43,6 +43,7 @@ export default function StudentRegistrationPage() {
 
     const router = useRouter();
     const { toast } = useToast();
+    const { setPendingStudents } = useUser();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -89,7 +90,10 @@ export default function StudentRegistrationPage() {
             toast({ variant: "destructive", title: "Error", description: "You must agree to the terms and conditions." });
             return;
         }
-        console.log("Form Submitted:", formData);
+        
+        // Add to pending students list in context
+        setPendingStudents(prev => [...prev, formData]);
+
         setIsSubmitted(true);
     };
 
@@ -102,7 +106,7 @@ export default function StudentRegistrationPage() {
                         <CardDescription>Your request has been sent for admin approval.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p>You will be notified via email once your account is activated. Thank you for your patience.</p>
+                        <p>You will be notified via email once your account is activated. You can log in once the admin approves your request. Thank you for your patience.</p>
                     </CardContent>
                     <CardFooter>
                         <Button className="w-full" onClick={() => router.push('/')}>Back to Login</Button>
