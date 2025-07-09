@@ -24,8 +24,7 @@ export default function RootLayout({
       <body className="font-body antialiased transition-colors duration-300">
         <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
             disableTransitionOnChange={false}
         >
             <UserProvider>
