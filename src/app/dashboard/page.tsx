@@ -227,7 +227,8 @@ export default function DashboardPage() {
       <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className={cn(
-            "grid auto-rows-max items-start gap-4 md:gap-8 order-last lg:order-first",
+            "grid auto-rows-max items-start gap-4 md:gap-8 lg:order-first",
+            userRole === 'student' ? (activeView === 'dashboard' ? 'order-first' : 'order-last') : '',
             userRole === 'student' ? "lg:col-span-2" : "lg:col-span-3"
           )}>
             <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
@@ -235,7 +236,10 @@ export default function DashboardPage() {
             </div>
           </div>
           {userRole === 'student' && (
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 order-first lg:order-last">
+            <div className={cn(
+              "grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 lg:order-last",
+              activeView === 'dashboard' ? 'order-last' : 'order-first'
+            )}>
               <ProfileCard user={user}/>
             </div>
           )}
