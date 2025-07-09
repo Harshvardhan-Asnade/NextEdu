@@ -298,7 +298,7 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                                 <div key={m.id} className='flex items-center justify-between p-2 rounded-md hover:bg-accent'>
                                     <div>
                                         <p className='text-sm font-medium'>{m.title}</p>
-                                        <p className='text-xs'><Badge variant="secondary">{m.course}</Badge></p>
+                                        <div className='text-xs'><Badge variant="secondary">{m.course}</Badge></div>
                                     </div>
                                     <div className="flex items-center">
                                         <Button variant="ghost" size="icon" onClick={() => toast({title: "Downloading File..."})}>
@@ -332,7 +332,7 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                         <CardDescription>Grade distribution for CS-201 (previous sem).</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <GradeDistributionChart />
+                        <GradeDistributionChart results={[]} />
                     </CardContent>
                 </Card>
             </div>

@@ -5,7 +5,7 @@ import { UserProvider } from '@/context/UserContext';
 
 export const metadata: Metadata = {
   title: 'NextEdu',
-  description: 'Next-gen education dashboard. by harshvardhan',
+  description: 'Next-gen education dashboard. by Harshvardhan Asnade',
 };
 
 export default function RootLayout({
