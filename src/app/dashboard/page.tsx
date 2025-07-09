@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield } from 'lucide-react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { cn } from '@/lib/utils';
+import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -30,8 +31,8 @@ export default function DashboardPage() {
     const role = localStorage.getItem('userRole');
     if (role) {
       setUserRole(role);
-      if (role === 'admin') {
-        setActiveView('admin');
+      if (role === 'admin' || role === 'faculty') {
+        setActiveView('dashboard');
       }
     } else {
       router.push('/');
@@ -44,6 +45,9 @@ export default function DashboardPage() {
   };
 
   const renderContent = () => {
+    if (userRole === 'faculty') return <FacultyDashboard />;
+    if (userRole === 'admin') return <AdminPanel />;
+
     switch (activeView) {
       case 'dashboard':
         return <DashboardOverview />;
@@ -53,23 +57,37 @@ export default function DashboardPage() {
         return <ExamModule />;
       case 'fees':
         return <FeesModule />;
-      case 'admin':
-        return userRole === 'admin' ? <AdminPanel /> : <DashboardOverview />;
       default:
         return <DashboardOverview />;
     }
   };
 
-  const baseNavItems = [
+  const studentNavItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'attendance', label: 'Attendance', icon: BarChart3 },
     { id: 'exam', label: 'Exam', icon: GraduationCap },
     { id: 'fees', label: 'Fees', icon: CreditCard },
   ];
+  
+  const facultyNavItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid }
+  ];
 
   const adminNavItem = { id: 'admin', label: 'Admin Panel', icon: Shield };
 
-  const navItems = userRole === 'admin' ? [adminNavItem, ...baseNavItems.filter(item => !['dashboard'].includes(item.id))] : baseNavItems;
+  const getNavItems = () => {
+    switch(userRole) {
+      case 'admin':
+        return [adminNavItem];
+      case 'faculty':
+        return facultyNavItems;
+      case 'student':
+      default:
+        return studentNavItems;
+    }
+  }
+
+  const navItems = getNavItems();
 
   if (!userRole) {
     return <div className="flex h-screen items-center justify-center">Loading...</div>;
@@ -89,7 +107,7 @@ export default function DashboardPage() {
               variant="ghost"
               className={cn(
                 "transition-colors hover:text-foreground",
-                activeView === item.id ? "text-foreground font-semibold border-b-2 border-primary rounded-none" : "text-muted-foreground"
+                (activeView === item.id || (userRole === 'admin' && item.id === 'admin')) ? "text-foreground font-semibold border-b-2 border-primary rounded-none" : "text-muted-foreground"
               )}
               onClick={() => setActiveView(item.id)}
             >
@@ -117,7 +135,7 @@ export default function DashboardPage() {
                   {navItems.map((item) => (
                     <Button
                       key={item.id}
-                      variant={activeView === item.id ? 'default' : 'ghost'}
+                      variant={(activeView === item.id || (userRole === 'admin' && item.id === 'admin')) ? 'default' : 'ghost'}
                       className="flex items-center justify-start gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                       onClick={() => {
                         setActiveView(item.id);
@@ -155,8 +173,8 @@ export default function DashboardPage() {
                   className="overflow-hidden rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : 'student portrait'} />
-                      <AvatarFallback>{userRole === 'admin' ? 'AD' : 'SD'}</AvatarFallback>
+                      <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : userRole === 'faculty' ? 'faculty portrait' : 'student portrait'} />
+                      <AvatarFallback>{userRole === 'admin' ? 'AD' : userRole === 'faculty' ? 'FC' : 'SD'}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -177,11 +195,11 @@ export default function DashboardPage() {
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className={cn(
             "grid auto-rows-max items-start gap-4 md:gap-8",
-            userRole === 'admin' ? "lg:col-span-3" : "lg:col-span-2"
+            userRole === 'student' ? "lg:col-span-2" : "lg:col-span-3"
           )}>
             {renderContent()}
           </div>
-          {userRole !== 'admin' && (
+          {userRole === 'student' && (
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
               <ProfileCard />
             </div>
@@ -189,7 +207,7 @@ export default function DashboardPage() {
         </div>
       </main>
       
-      {userRole !== 'admin' && <Chatbot />}
+      {userRole === 'student' && <Chatbot />}
     </div>
   );
 }

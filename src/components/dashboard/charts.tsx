@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Line, LineChart } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Line, LineChart, Cell } from "recharts";
 
 const subjectAttendanceData = [
     { name: "Algorithms", percentage: 83.33 },
@@ -18,8 +18,29 @@ const monthAttendanceData = [
     { name: "May", percentage: 90 },
 ];
 
+const gradeDistributionData = [
+    { name: 'A+', count: 8 },
+    { name: 'A', count: 15 },
+    { name: 'B+', count: 12 },
+    { name: 'B', count: 7 },
+    { name: 'C', count: 3 },
+    { name: 'Fail', count: 1 },
+];
+
+const gradeColors = [
+    "hsl(var(--chart-1))",
+    "hsl(var(--chart-2))",
+    "hsl(var(--chart-3))",
+    "hsl(var(--chart-4))",
+    "hsl(var(--chart-5))",
+    "hsl(var(--destructive))",
+]
+
+
 const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      const isGradeChart = payload[0].payload.count !== undefined;
+
       return (
         <div className="rounded-lg border bg-background/80 backdrop-blur-sm p-2 shadow-sm">
           <div className="grid grid-cols-2 gap-2">
@@ -28,7 +49,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 {label}
               </span>
               <span className="font-bold text-muted-foreground">
-                {payload[0].value}%
+                {isGradeChart 
+                    ? `${payload[0].value} Students`
+                    : `${payload[0].value}%`
+                }
               </span>
             </div>
           </div>
@@ -66,6 +90,26 @@ export function MonthViewChart() {
                     <Tooltip content={<CustomTooltip />} cursor={{stroke: 'hsl(var(--accent) / 0.2)', strokeWidth: 1}} />
                     <Line type="monotone" dataKey="percentage" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4, fill: 'hsl(var(--primary))' }} />
                 </LineChart>
+            </ResponsiveContainer>
+        </div>
+    );
+}
+
+export function GradeDistributionChart() {
+    return (
+        <div className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={gradeDistributionData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
+                    <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip content={<CustomTooltip />} cursor={{fill: 'hsl(var(--accent) / 0.2)'}} />
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                        {gradeDistributionData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={gradeColors[index % gradeColors.length]} />
+                        ))}
+                    </Bar>
+                </BarChart>
             </ResponsiveContainer>
         </div>
     );
