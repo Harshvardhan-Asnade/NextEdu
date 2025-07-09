@@ -10,7 +10,7 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262.1 83.3% 57.8%;
+    --primary: 256.1 47.3% 52%;
     --primary-foreground: 210 20% 98%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
@@ -22,7 +22,7 @@
     --destructive-foreground: 355.7 100% 97.3%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 256.1 47.3% 52%;
     --radius: 0.8rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -42,7 +42,7 @@
     --card-foreground: 210 20% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 210 20% 98%;
-    --primary: 262.1 83.3% 57.8%;
+    --primary: 256.1 47.3% 52%;
     --primary-foreground: 210 20% 98%;
     --secondary: 215 28% 17%;
     --secondary-foreground: 210 20% 98%;
@@ -54,7 +54,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 28% 17%;
     --input: 215 28% 17%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 256.1 47.3% 52%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -75,29 +75,6 @@
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  @keyframes background-pan {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .dark body {
-     background-color: hsl(var(--background));
-     background-image:
-        radial-gradient(ellipse 50% 80% at 50% -20%, hsl(var(--primary) / 0.2), transparent),
-        radial-gradient(ellipse 80% 50% at 10% 110%, hsl(220 70% 50% / 0.25), transparent),
-        radial-gradient(ellipse 80% 50% at 90% 110%, hsl(280 70% 50% / 0.25), transparent);
-     background-attachment: fixed;
-     background-size: 200% 200%;
-     animation: background-pan 45s ease-in-out infinite;
   }
 }
 

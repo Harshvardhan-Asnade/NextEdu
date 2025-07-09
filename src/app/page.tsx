@@ -3,95 +3,109 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hexagon, LogIn, Loader2 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [role, setRole] = useState('student');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate a network request
-    setTimeout(() => {
-      router.push('/dashboard');
-    }, 2000);
-  };
-
-  const getRoleDetails = (selectedRole: string) => {
-    switch (selectedRole) {
-      case 'admin':
-        return { label: 'Employee ID', placeholder: 'e.g., ADM123' };
-      case 'faculty':
-        return { label: 'Faculty ID', placeholder: 'e.g., FAC456' };
-      case 'student':
-      default:
-        return { label: 'Enrollment Number', placeholder: 'e.g., FD2021034' };
-    }
-  };
-
-  const { label, placeholder } = getRoleDetails(role);
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4 animate-in fade-in duration-1000">
-      <Card className="w-full max-w-md glass-card animate-in fade-in-0 zoom-in-95 duration-700">
-        <CardHeader className="text-center p-8">
-            <Link
-              href="#"
-              className="group flex mx-auto h-14 w-14 shrink-0 items-center justify-center gap-2 rounded-full bg-primary/10 border-2 border-primary/50 text-primary mb-4 transition-all duration-300 hover:bg-primary/20 hover:border-primary"
-            >
-              <Hexagon className="h-7 w-7 transition-all group-hover:scale-110 group-hover:rotate-12" />
-              <span className="sr-only">Nexus Dashboard</span>
-            </Link>
-          <CardTitle className="text-3xl font-bold">
-            Welcome to <span className="text-primary">Nexus</span>
-          </CardTitle>
-          <CardDescription className="pt-1">
-            Sign in to access your dashboard
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleLogin}>
-          <CardContent className="space-y-4 px-8">
-            <div className="space-y-2">
-              <Label htmlFor="role">Your Role</Label>
-              <Select defaultValue="student" onValueChange={setRole} disabled={isLoading}>
-                <SelectTrigger id="role" className="w-full">
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="student">Student</SelectItem>
-                  <SelectItem value="faculty">Faculty</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="username">{label}</Label>
-              <Input id="username" type="text" placeholder={placeholder} required disabled={isLoading} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="••••••••" required disabled={isLoading} />
-            </div>
-          </CardContent>
-          <CardFooter className="px-8 pb-8 pt-4">
-            <Button type="submit" className="w-full h-11" disabled={isLoading}>
-              {isLoading ? (
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              ) : (
-                  <LogIn className="mr-2 h-5 w-5" />
-              )}
-              {isLoading ? 'Please wait...' : 'Sign In'}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+const Illustration = () => (
+    <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
+        <div className="absolute -top-16 -left-16 w-64 h-64 bg-white/10 rounded-full animate-pulse" />
+        <div className="absolute -bottom-24 -right-16 w-72 h-72 bg-white/10 rounded-full animate-pulse animation-delay-2000" />
+        <svg viewBox="0 0 512 512" className="relative w-full h-auto max-w-lg text-white z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M256 288c53.02 0 96-42.98 96-96s-42.98-96-96-96-96 42.98-96 96 42.98 96 96 96Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M128 416c0-57.9 46.1-104 104-104h48c57.9 0 104 46.1 104 104v16H128v-16Z" fill="rgba(255,255,255,0.2)"/>
+            <rect x="100" y="280" width="312" height="160" rx="16" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="4"/>
+            <path d="M80 440h352" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round"/>
+            <rect x="116" y="296" width="280" height="128" rx="8" fill="rgba(0,0,0,0.2)"/>
+            <path d="M80 160 120 200l-40 40" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.5s' }}/>
+            <path d="M432 160 392 200l40 40" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.7s' }}/>
+            <circle cx="90" cy="90" r="10" fill="currentColor" opacity="0.5" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
+            <circle cx="420" cy="300" r="14" fill="currentColor" opacity="0.5" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
+            <rect x="380" y="80" width="40" height="40" rx="8" stroke="currentColor" strokeWidth="8" opacity="0.5" className="animate-spin-slow"/>
+            <path d="M128 350h50" stroke="hsl(190, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.1s'}}/>
+            <path d="M128 365h80" stroke="hsl(300, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.3s'}}/>
+            <path d="M128 380h30" stroke="hsl(50, 80%, 70%)" strokeWidth="6" strokeLinecap="round" className="animate-pulse" style={{animationDelay: '0.5s'}}/>
+        </svg>
     </div>
-  );
+);
+
+export default function ModernLoginPage() {
+    const [role, setRole] = useState('student');
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setTimeout(() => {
+            router.push('/dashboard');
+        }, 1500);
+    };
+    
+    const welcomeText = `Welcome ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+
+    return (
+        <div className="min-h-screen w-full lg:grid lg:grid-cols-2 bg-background animate-in fade-in duration-500">
+            <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto w-full max-w-sm space-y-6">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground text-center">
+                            {welcomeText}
+                        </h1>
+                        <p className="mt-2 text-center text-sm text-muted-foreground">
+                            Sign in to your dashboard
+                        </p>
+                    </div>
+
+                    <Tabs defaultValue="student" onValueChange={setRole} className="w-full">
+                        <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="student">Student</TabsTrigger>
+                            <TabsTrigger value="faculty">Faculty</TabsTrigger>
+                            <TabsTrigger value="admin">Admin</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+
+                    <form className="space-y-4" onSubmit={handleLogin}>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email address</Label>
+                            <Input id="email" name="email" type="email" autoComplete="email" required placeholder="name@example.com" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" name="password" type="password" autoComplete="current-password" required placeholder="••••••••" disabled={isLoading} className="transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/20" />
+                        </div>
+
+                        <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                                <Checkbox id="remember-me" name="remember-me" disabled={isLoading} />
+                                <Label htmlFor="remember-me" className="text-muted-foreground font-normal">
+                                    Remember me
+                                </Label>
+                            </div>
+                            <Link href="#" className="font-medium text-primary hover:text-primary/90">
+                                Forgot password?
+                            </Link>
+                        </div>
+                        
+                        <Button type="submit" className="w-full h-11 transition-all duration-300" disabled={isLoading}>
+                            {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Sign In'}
+                        </Button>
+                        
+                        <div className="text-center text-sm text-muted-foreground">
+                            Don't have an account?{' '}
+                            <Link href="#" className="font-medium text-primary hover:text-primary/90">
+                                Sign up
+                            </Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div className="hidden lg:block">
+                 <Illustration />
+            </div>
+        </div>
+    );
 }
