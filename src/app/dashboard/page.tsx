@@ -191,16 +191,18 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+      <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className={cn(
             "grid auto-rows-max items-start gap-4 md:gap-8",
             userRole === 'student' ? "lg:col-span-2" : "lg:col-span-3"
           )}>
-            {renderContent()}
+            <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+              {renderContent()}
+            </div>
           </div>
           {userRole === 'student' && (
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
               <ProfileCard />
             </div>
           )}

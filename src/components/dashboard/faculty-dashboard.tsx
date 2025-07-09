@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BarChart2, Bell, BookUser, CalendarClock, ClipboardList, FolderUp, Megaphone, UserCheck, Video, Upload, Trash2, FilePlus } from "lucide-react";
+import { BarChart2, Bell, BookUser, CalendarClock, ClipboardList, FolderUp, Megaphone, UserCheck, Video, Upload, Trash2, FilePlus, Download } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
@@ -69,6 +69,16 @@ export function FacultyDashboard() {
         setAnnouncements([announcement, ...announcements]);
         setNewAnnouncement("");
         toast({ title: "Announcement Posted!", description: "Your announcement is now live for all students." });
+    };
+
+    const handleDeleteAssignment = (id: number) => {
+        setAssignments(prev => prev.filter(a => a.id !== id));
+        toast({ title: "Assignment Removed", variant: "destructive", description: "The assignment has been successfully deleted." });
+    };
+
+    const handleDeleteMaterial = (id: number) => {
+        setStudyMaterials(prev => prev.filter(m => m.id !== id));
+        toast({ title: "Material Removed", variant: "destructive", description: "The study material has been successfully deleted." });
     };
 
     const handleCreateAssignment = (e: React.FormEvent<HTMLFormElement>) => {
@@ -194,7 +204,14 @@ export function FacultyDashboard() {
                                                 <div className="font-medium">{a.title}</div>
                                                 <div className="text-xs text-muted-foreground">Due: {a.due}</div>
                                             </TableCell>
-                                            <TableCell className='text-right font-mono'>{a.submissions}</TableCell>
+                                            <TableCell className='text-right'>
+                                                <div className="flex items-center justify-end">
+                                                    <span className="font-mono">{a.submissions}</span>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 ml-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteAssignment(a.id)}>
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -277,9 +294,14 @@ export function FacultyDashboard() {
                                         <p className='text-sm font-medium'>{m.title}</p>
                                         <p className='text-xs'><Badge variant="secondary">{m.course}</Badge></p>
                                     </div>
-                                    <Button variant="ghost" size="icon" onClick={() => toast({title: "Downloading File..."})}>
-                                        <Download className='h-4 w-4' />
-                                    </Button>
+                                    <div className="flex items-center">
+                                        <Button variant="ghost" size="icon" onClick={() => toast({title: "Downloading File..."})}>
+                                            <Download className='h-4 w-4' />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteMaterial(m.id)}>
+                                            <Trash2 className='h-4 w-4' />
+                                        </Button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
