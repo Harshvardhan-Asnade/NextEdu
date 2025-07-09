@@ -7,16 +7,21 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hexagon, LogIn } from 'lucide-react';
+import { Hexagon, LogIn, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
   const [role, setRole] = useState('student');
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/dashboard');
+    setIsLoading(true);
+    // Simulate a network request
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 2000);
   };
 
   const getRoleDetails = (selectedRole: string) => {
@@ -34,26 +39,28 @@ export default function LoginPage() {
   const { label, placeholder } = getRoleDetails(role);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background animate-in fade-in duration-1000">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-
-      <Card className="w-full max-w-sm glass-card animate-in fade-in-0 zoom-in-95 duration-500">
-        <CardHeader className="text-center p-6">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4 animate-in fade-in duration-1000">
+      <Card className="w-full max-w-md glass-card animate-in fade-in-0 zoom-in-95 duration-700">
+        <CardHeader className="text-center p-8">
             <Link
               href="#"
-              className="group flex mx-auto h-12 w-12 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-10 md:w-10 md:text-base mb-4"
+              className="group flex mx-auto h-14 w-14 shrink-0 items-center justify-center gap-2 rounded-full bg-primary/10 border-2 border-primary/50 text-primary mb-4 transition-all duration-300 hover:bg-primary/20 hover:border-primary"
             >
-              <Hexagon className="h-6 w-6 transition-all group-hover:scale-110 group-hover:rotate-12" />
+              <Hexagon className="h-7 w-7 transition-all group-hover:scale-110 group-hover:rotate-12" />
               <span className="sr-only">Nexus Dashboard</span>
             </Link>
-          <CardTitle className="text-2xl">Welcome to Nexus</CardTitle>
-          <CardDescription>Select your role and sign in to continue</CardDescription>
+          <CardTitle className="text-3xl font-bold">
+            Welcome to <span className="text-primary">Nexus</span>
+          </CardTitle>
+          <CardDescription className="pt-1">
+            Sign in to access your dashboard
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
-          <CardContent className="space-y-4 px-6">
+          <CardContent className="space-y-4 px-8">
             <div className="space-y-2">
               <Label htmlFor="role">Your Role</Label>
-              <Select defaultValue="student" onValueChange={setRole}>
+              <Select defaultValue="student" onValueChange={setRole} disabled={isLoading}>
                 <SelectTrigger id="role" className="w-full">
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
@@ -66,17 +73,21 @@ export default function LoginPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="username">{label}</Label>
-              <Input id="username" type="text" placeholder={placeholder} required />
+              <Input id="username" type="text" placeholder={placeholder} required disabled={isLoading} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="••••••••" required />
+              <Input id="password" type="password" placeholder="••••••••" required disabled={isLoading} />
             </div>
           </CardContent>
-          <CardFooter className="px-6 pb-6">
-            <Button type="submit" className="w-full">
-              <LogIn className="mr-2" />
-              Sign In
+          <CardFooter className="px-8 pb-8 pt-4">
+            <Button type="submit" className="w-full h-11" disabled={isLoading}>
+              {isLoading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                  <LogIn className="mr-2 h-5 w-5" />
+              )}
+              {isLoading ? 'Please wait...' : 'Sign In'}
             </Button>
           </CardFooter>
         </form>
