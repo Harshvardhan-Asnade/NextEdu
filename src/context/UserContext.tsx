@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -267,6 +266,27 @@ const initialAnnouncements: Announcement[] = [
         time: '2 days ago',
         scope: 'global',
     },
+    {
+        id: 3,
+        by: 'Library Dept.',
+        content: 'The central library will be open 24/7 during the upcoming examination period. Good luck with your studies!',
+        time: '3 days ago',
+        scope: 'global',
+    },
+    {
+        id: 4,
+        by: 'CSE Department',
+        content: 'A guest lecture on "The Future of Artificial Intelligence" by a distinguished speaker will be held this Friday.',
+        time: '4 days ago',
+        scope: 'global',
+    },
+    {
+        id: 5,
+        by: 'Admin',
+        content: 'Welcome to the new NextEdu portal! We are excited to have you here.',
+        time: '5 days ago',
+        scope: 'global',
+    }
 ];
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
