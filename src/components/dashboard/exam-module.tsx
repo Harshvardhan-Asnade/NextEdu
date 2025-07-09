@@ -94,8 +94,8 @@ export function ExamModule() {
                     </CardContent>
                 </Card>
                 <Card className="glass-card flex flex-col items-center justify-center p-6 text-center">
-                    <CheckCircle2 className="w-16 h-16 text-green-400 mb-4" />
-                    <p className="text-lg font-semibold text-green-400">You have passed all subjects.</p>
+                    <CheckCircle2 className="w-16 h-16 text-success mb-4" />
+                    <p className="text-lg font-semibold text-success">You have passed all subjects.</p>
                     <p className="text-muted-foreground text-sm mb-4">Congratulations on your excellent performance.</p>
                      <Button>
                         <Download className="mr-2 h-4 w-4" /> Download Marksheet

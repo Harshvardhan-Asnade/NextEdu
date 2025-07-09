@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, CreditCard } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 const feeSummary = [
     { head: "Tuition Fee", toPay: 2500, paid: 2500, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
@@ -22,6 +22,7 @@ const transactionHistory = [
 
 export function FeesModule() {
     const totalOutstanding = feeSummary.reduce((sum, item) => sum + item.outstanding, 0);
+    const { toast } = useToast();
 
     const handlePayNow = () => {
         toast({
@@ -32,8 +33,8 @@ export function FeesModule() {
 
     return (
         <div className="space-y-4">
-            <Alert variant="destructive" className="bg-red-500/10 border-red-500/30 text-red-400">
-                <AlertCircle className="h-4 w-4 !text-red-400" />
+            <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Important Notes</AlertTitle>
                 <AlertDescription>
                     You will be redirected to a secure payment gateway. Do not refresh the page during the transaction.
@@ -61,8 +62,8 @@ export function FeesModule() {
                                 <TableRow key={index}>
                                     <TableCell>{item.head}</TableCell>
                                     <TableCell>${item.toPay}</TableCell>
-                                    <TableCell className="text-green-400">${item.paid}</TableCell>
-                                    <TableCell className={item.outstanding > 0 ? "text-red-400" : ""}>${item.outstanding}</TableCell>
+                                    <TableCell className="text-success">${item.paid}</TableCell>
+                                    <TableCell className={item.outstanding > 0 ? "text-destructive" : ""}>${item.outstanding}</TableCell>
                                     <TableCell>{item.dueDate}</TableCell>
                                 </TableRow>
                             ))}
@@ -71,7 +72,7 @@ export function FeesModule() {
                     <div className="flex justify-end items-center mt-4 gap-4">
                         <div className="text-right">
                             <p className="text-muted-foreground">Total Outstanding</p>
-                            <p className="text-xl font-bold text-red-400">${totalOutstanding.toFixed(2)}</p>
+                            <p className="text-xl font-bold text-destructive">${totalOutstanding.toFixed(2)}</p>
                         </div>
                         <Dialog>
                             <DialogTrigger asChild>
@@ -123,7 +124,7 @@ export function FeesModule() {
                                     <TableCell>{txn.sem}</TableCell>
                                     <TableCell>{txn.mode}</TableCell>
                                     <TableCell>${txn.amount}</TableCell>
-                                    <TableCell><Badge className={txn.status === 'Success' ? 'bg-green-500/20 text-green-400 border-green-500/20' : ''} variant="outline">{txn.status}</Badge></TableCell>
+                                    <TableCell><Badge className={txn.status === 'Success' ? 'bg-success/20 text-success border-success/20' : ''} variant="outline">{txn.status}</Badge></TableCell>
                                     <TableCell>{txn.txnId}</TableCell>
                                 </TableRow>
                             ))}

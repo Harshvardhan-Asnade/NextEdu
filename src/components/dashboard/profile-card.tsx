@@ -47,7 +47,7 @@ export function ProfileCard() {
                     <span className="font-medium">+1 098 765 432</span>
                 </div>
                 <Separator className="my-3" />
-                <div className="p-3 rounded-lg bg-red-500/10 text-red-400 flex items-center gap-2">
+                <div className="p-3 rounded-lg bg-destructive/10 text-destructive flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5" />
                     <div>
                         <p className="font-bold">Attendance Warning</p>

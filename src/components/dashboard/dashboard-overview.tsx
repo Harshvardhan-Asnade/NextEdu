@@ -7,10 +7,10 @@ import { AttendanceChart } from "./charts";
 
 export function DashboardOverview() {
     const summaryData = {
-        attendance: { value: "84.2%", status: "Good", icon: CheckCircle2, color: "text-green-400" },
-        cgpa: { value: "8.75", status: "Excellent", icon: CheckCircle2, color: "text-green-400" },
-        fees: { value: "$500 Due", status: "Pending", icon: AlertTriangle, color: "text-yellow-400" },
-        backlogs: { value: "0", status: "Cleared", icon: BookOpen, color: "text-green-400" }
+        attendance: { value: "84.2%", status: "Good", icon: CheckCircle2, color: "text-success" },
+        cgpa: { value: "8.75", status: "Excellent", icon: CheckCircle2, color: "text-success" },
+        fees: { value: "$500 Due", status: "Pending", icon: AlertTriangle, color: "text-warning" },
+        backlogs: { value: "0", status: "Cleared", icon: BookOpen, color: "text-success" }
     };
     
     return (
@@ -22,7 +22,7 @@ export function DashboardOverview() {
                         <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-green-400">84.2%</div>
+                        <div className="text-2xl font-bold text-success">84.2%</div>
                         <p className="text-xs text-muted-foreground">Your attendance is in good standing.</p>
                     </CardContent>
                 </Card>
@@ -32,7 +32,7 @@ export function DashboardOverview() {
                         <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-green-400">8.75</div>
+                        <div className="text-2xl font-bold text-success">8.75</div>
                         <p className="text-xs text-muted-foreground">Excellent academic performance.</p>
                     </CardContent>
                 </Card>
@@ -42,7 +42,7 @@ export function DashboardOverview() {
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-yellow-400">$500 Due</div>
+                        <div className="text-2xl font-bold text-warning">$500 Due</div>
                         <p className="text-xs text-muted-foreground">Next due date: 25th July 2024</p>
                     </CardContent>
                 </Card>
@@ -69,7 +69,7 @@ export function DashboardOverview() {
                             <p className="text-sm font-medium leading-none">Semester 3 results published</p>
                             <p className="text-sm text-muted-foreground">You have passed all subjects.</p>
                         </div>
-                        <div className="ml-auto font-medium"><Badge variant="outline" className="text-green-400 border-green-400/50">Passed</Badge></div>
+                        <div className="ml-auto font-medium"><Badge variant="outline" className="text-success border-success/50">Passed</Badge></div>
                     </div>
                     <div className="flex items-center">
                         <div>

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, Download } from "lucide-react";
-import { AttendanceChart, MonthViewChart } from "./charts";
+import { MonthViewChart } from "./charts";
 
 const subjects = [
     { name: "Advanced Algorithms", type: "Theory", conducted: 60, present: 50, absent: 10 },
@@ -21,9 +21,9 @@ const calculatePercentage = (present: number, conducted: number) => {
 };
 
 const getPercentageColor = (percentage: number) => {
-    if (percentage < 75) return "text-red-400";
-    if (percentage < 85) return "text-yellow-400";
-    return "text-green-400";
+    if (percentage < 75) return "text-destructive";
+    if (percentage < 85) return "text-warning";
+    return "text-success";
 };
 
 export function AttendanceModule() {
@@ -35,8 +35,8 @@ export function AttendanceModule() {
     return (
         <div className="space-y-4">
             {overallPercentage < 75 && (
-                 <Alert variant="destructive" className="bg-red-500/10 border-red-500/30 text-red-400">
-                    <AlertCircle className="h-4 w-4 !text-red-400" />
+                 <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Low Attendance Warning</AlertTitle>
                     <AlertDescription>
                         Your attendance is below 75%. You may face exam eligibility issues.
@@ -73,7 +73,7 @@ export function AttendanceModule() {
                                 <CardTitle className="text-sm font-medium">Present</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-green-400">{totalPresent}</div>
+                                <div className="text-2xl font-bold text-success">{totalPresent}</div>
                             </CardContent>
                         </Card>
                          <Card className="glass-card">
@@ -81,7 +81,7 @@ export function AttendanceModule() {
                                 <CardTitle className="text-sm font-medium">Absent</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-red-400">{totalAbsent}</div>
+                                <div className="text-2xl font-bold text-destructive">{totalAbsent}</div>
                             </CardContent>
                         </Card>
                          <Card className="glass-card">
@@ -141,7 +141,7 @@ export function AttendanceModule() {
                                                     <TableCell>{subject.conducted}</TableCell>
                                                     <TableCell>{subject.present}</TableCell>
                                                     <TableCell>{subject.absent}</TableCell>
-                                                    <TableCell className={getPercentageColor(percentage)}>{percentage}%</TableCell>
+                                                    <TableCell className={`font-semibold ${getPercentageColor(percentage)}`}>{percentage}%</TableCell>
                                                 </TableRow>
                                             )})}
                                         </TableBody>
