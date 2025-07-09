@@ -80,15 +80,14 @@ export default function DashboardPage() {
     <TooltipProvider>
       <div className="flex min-h-screen w-full bg-transparent animate-in fade-in duration-500">
         <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-card/60 backdrop-blur-xl border-white/10 sm:flex">
-          <nav className="flex h-full flex-col items-center gap-4 px-2 sm:py-5">
-            <Link
-              href="#"
-              className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-            >
-              <Hexagon className="h-5 w-5 transition-all group-hover:scale-110 group-hover:rotate-12" />
-              <span className="sr-only">NeoEdu</span>
+          <div className="flex h-[60px] items-center border-b px-6">
+            <Link href="#" className="flex items-center gap-2 font-semibold">
+              <Hexagon className="h-6 w-6 text-primary" />
+              <span className="text-foreground">NextEdu</span>
             </Link>
-            <div className="flex flex-col items-center gap-4">
+          </div>
+          <div className="flex flex-1 flex-col justify-between">
+            <nav className="flex flex-col items-center gap-4 px-2 py-4">
               {navItems.map((item) => (
                 <Tooltip key={item.id}>
                   <TooltipTrigger asChild>
@@ -105,8 +104,8 @@ export default function DashboardPage() {
                   <TooltipContent side="right">{item.label}</TooltipContent>
                 </Tooltip>
               ))}
-            </div>
-            <div className="mt-auto">
+            </nav>
+            <nav className="flex flex-col items-center gap-4 px-2 py-4">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -121,8 +120,8 @@ export default function DashboardPage() {
                 </TooltipTrigger>
                 <TooltipContent side="right">Logout</TooltipContent>
               </Tooltip>
-            </div>
-          </nav>
+            </nav>
+          </div>
         </aside>
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full">
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background/60 backdrop-blur-xl px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -137,10 +136,10 @@ export default function DashboardPage() {
                 <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="#"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground"
+                  className="group flex items-center gap-2 text-lg font-semibold"
                 >
-                  <Hexagon className="h-6 w-6 transition-all group-hover:scale-110 group-hover:rotate-12" />
-                  <span className="sr-only">NeoEdu</span>
+                  <Hexagon className="h-6 w-6 text-primary" />
+                  <span className="text-foreground">NextEdu</span>
                 </Link>
                   {navItems.map((item) => (
                     <Button

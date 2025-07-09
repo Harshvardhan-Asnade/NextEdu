@@ -19,7 +19,7 @@ interface Message {
 export function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hello! I am the NeoEdu assistant. How can I help you today regarding admissions, exams, or fees?", sender: "bot" }
+        { id: 1, text: "Hello! I am the NextEdu assistant. How can I help you today regarding admissions, exams, or fees?", sender: "bot" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +76,7 @@ export function Chatbot() {
                                     <AvatarFallback>NA</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="text-sm font-medium leading-none">NeoEdu Assistant</p>
+                                    <p className="text-sm font-medium leading-none">NextEdu Assistant</p>
                                     <p className="text-sm text-muted-foreground">AI Powered</p>
                                 </div>
                             </div>

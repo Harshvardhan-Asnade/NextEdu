@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'chatbotStudentQueriesPrompt',
   input: {schema: ChatbotStudentQueriesInputSchema},
   output: {schema: ChatbotStudentQueriesOutputSchema},
-  prompt: `You are a helpful AI chatbot assistant for NeoEdu University. Your goal is to answer student questions accurately, succinctly and informatively based on the information provided below.
+  prompt: `You are a helpful AI chatbot assistant for NextEdu University. Your goal is to answer student questions accurately, succinctly and informatively based on the information provided below.
 
   If the user asks a question you cannot answer with the provided information, politely state that you do not have that information and suggest they contact the university administration.
 
