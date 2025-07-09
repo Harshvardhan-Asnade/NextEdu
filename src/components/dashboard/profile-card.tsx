@@ -7,9 +7,29 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 import { Download, Bell } from "lucide-react";
+import { useState } from "react";
 
 export function ProfileCard() {
+    const { toast } = useToast();
+    const [selectedCertificate, setSelectedCertificate] = useState("");
+
+    const handleRequestCertificate = () => {
+        if (!selectedCertificate) {
+            toast({
+                title: "No Certificate Selected",
+                description: "Please select a certificate type to request.",
+                variant: "destructive",
+            });
+            return;
+        }
+        toast({
+            title: "Certificate Requested",
+            description: `Your request for a ${selectedCertificate.replace(/([A-Z])/g, ' $1').trim()} has been submitted.`,
+        });
+    };
+
     return (
         <Card className="glass-card overflow-hidden">
             <CardHeader className="flex flex-col items-center gap-4 text-center p-6">
@@ -57,17 +77,17 @@ export function ProfileCard() {
             <CardFooter className="p-6 pt-0">
                 <div className="w-full space-y-2">
                     <p className="text-sm font-medium">Certificate Request</p>
-                    <Select>
+                    <Select onValueChange={setSelectedCertificate}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select certificate type" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="bonafide">Bonafide Certificate</SelectItem>
-                            <SelectItem value="transfer">Transfer Certificate</SelectItem>
-                            <SelectItem value="character">Character Certificate</SelectItem>
+                            <SelectItem value="BonafideCertificate">Bonafide Certificate</SelectItem>
+                            <SelectItem value="TransferCertificate">Transfer Certificate</SelectItem>
+                            <SelectItem value="CharacterCertificate">Character Certificate</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button className="w-full">
+                    <Button className="w-full" onClick={handleRequestCertificate}>
                         <Download className="mr-2 h-4 w-4"/> Request Certificate
                     </Button>
                 </div>

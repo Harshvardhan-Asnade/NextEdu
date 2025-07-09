@@ -17,10 +17,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleLogout = () => {
     router.push('/');
@@ -162,8 +164,8 @@ export default function DashboardPage() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast({ title: "Coming Soon!", description: "Settings page is under construction."})}>Settings</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast({ title: "Support", description: "Contact support@nexus.edu for help."})}>Support</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>

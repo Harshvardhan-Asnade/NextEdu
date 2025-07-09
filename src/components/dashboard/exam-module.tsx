@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2, Download, XCircle } from "lucide-react";
 
 const allResultsData = {
@@ -50,8 +51,16 @@ const allResultsData = {
 
 export function ExamModule() {
     const [activeSem, setActiveSem] = useState("sem3");
+    const { toast } = useToast();
 
     const currentData = allResultsData[activeSem as keyof typeof allResultsData];
+
+    const handleDownload = () => {
+        toast({
+            title: "Marksheet Download",
+            description: "Your marksheet is being generated and will download shortly.",
+        });
+    };
 
     const renderContent = () => {
         if (!currentData.summary) {
@@ -124,7 +133,7 @@ export function ExamModule() {
                                 <p className="text-muted-foreground text-sm mb-4">Please contact the administration.</p>
                             </>
                         )}
-                        <Button>
+                        <Button onClick={handleDownload}>
                             <Download className="mr-2 h-4 w-4" /> Download Marksheet
                         </Button>
                     </Card>

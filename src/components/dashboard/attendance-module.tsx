@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, Download } from "lucide-react";
 import { MonthViewChart } from "./charts";
 
@@ -58,6 +59,14 @@ const getPercentageColor = (percentage: number) => {
 
 export function AttendanceModule() {
     const [activeSem, setActiveSem] = useState("sem3");
+    const { toast } = useToast();
+
+    const handleDownload = () => {
+        toast({
+            title: "Report Download",
+            description: "Your attendance report is being generated and will download shortly.",
+        });
+    };
 
     const currentSemData = allSemestersData[activeSem as keyof typeof allSemestersData];
     const subjects = currentSemData.subjects;
@@ -132,7 +141,7 @@ export function AttendanceModule() {
                             <TabsTrigger value="month">Month View Graph</TabsTrigger>
                         </TabsList>
                         <div className="ml-auto flex items-center gap-2">
-                            <Button size="sm" variant="outline" className="h-8 gap-1">
+                            <Button size="sm" variant="outline" className="h-8 gap-1" onClick={handleDownload}>
                                 <Download className="h-3.5 w-3.5" />
                                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                     Download Report
