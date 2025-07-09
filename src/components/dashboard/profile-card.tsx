@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Download, Bell } from "lucide-react";
 import { useState } from "react";
 
-export function ProfileCard() {
+export function ProfileCard({ user }: { user: any }) {
     const { toast } = useToast();
     const [selectedCertificate, setSelectedCertificate] = useState("");
 
@@ -30,41 +30,53 @@ export function ProfileCard() {
         });
     };
 
+    if (!user) {
+        return (
+             <Card className="glass-card overflow-hidden">
+                <CardHeader className="flex flex-col items-center gap-4 text-center p-6">
+                    <Avatar className="h-24 w-24 border-2 border-primary">
+                        <AvatarFallback>...</AvatarFallback>
+                    </Avatar>
+                </CardHeader>
+             </Card>
+        )
+    }
+
     return (
         <Card className="glass-card overflow-hidden">
             <CardHeader className="flex flex-col items-center gap-4 text-center p-6">
                 <Avatar className="h-24 w-24 border-2 border-primary">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="Student Avatar" data-ai-hint="student portrait" />
-                    <AvatarFallback>AD</AvatarFallback>
+                    <AvatarImage src={user.avatar} alt="Student Avatar" data-ai-hint="student portrait" />
+                    <AvatarFallback>{user.name.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <CardTitle className="text-2xl">Alex Doe</CardTitle>
-                    <CardDescription>Enrollment No: FD2021034</CardDescription>
+                    <CardTitle className="text-2xl">{user.name}</CardTitle>
+                    <CardDescription>Enrollment No: {user.id}</CardDescription>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-center">
-                     <Badge variant="secondary">B.Tech CSE (AI/ML)</Badge>
-                     <Badge variant="secondary">Sem 3</Badge>
+                     <Badge variant="secondary">{user.course}</Badge>
+                     <Badge variant="secondary">Sem {user.semester}</Badge>
                 </div>
             </CardHeader>
             <CardContent className="p-6 text-sm">
                 <div className="flex justify-between">
                     <span>Date of Birth</span>
-                    <span className="font-medium">15-08-2003</span>
+                    <span className="font-medium">{user.dob}</span>
                 </div>
                 <Separator className="my-3" />
                 <div className="flex justify-between">
                     <span>Email</span>
-                    <span className="font-medium">alex.doe@university.edu</span>
+                    <span className="font-medium">{user.email}</span>
                 </div>
                  <Separator className="my-3" />
                 <div className="flex justify-between">
                     <span>Contact</span>
-                    <span className="font-medium">+1 234 567 890</span>
+                    <span className="font-medium">{user.contact}</span>
                 </div>
                  <Separator className="my-3" />
                 <div className="flex justify-between">
                     <span>Parent's Contact</span>
-                    <span className="font-medium">+1 098 765 432</span>
+                    <span className="font-medium">{user.parentContact}</span>
                 </div>
                 <Separator className="my-3" />
                  <div className="flex items-center justify-between">

@@ -20,19 +20,19 @@ import { useToast } from '@/hooks/use-toast';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { cn } from '@/lib/utils';
 import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
-import { UserProvider } from '@/context/UserContext';
 
-function DashboardLayout() {
+export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    if (role) {
-      setUserRole(role);
-      if (role === 'admin' || role === 'faculty') {
+    const userData = localStorage.getItem('loggedInUser');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      if (parsedUser.role === 'admin' || parsedUser.role === 'faculty') {
         setActiveView('dashboard');
       }
     } else {
@@ -41,9 +41,11 @@ function DashboardLayout() {
   }, [router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('userRole');
+    localStorage.removeItem('loggedInUser');
     router.push('/');
   };
+  
+  const userRole = user?.role;
 
   const renderContent = () => {
     if (userRole === 'faculty') return <FacultyDashboard />;
@@ -90,7 +92,7 @@ function DashboardLayout() {
 
   const navItems = getNavItems();
 
-  if (!userRole) {
+  if (!user) {
     return <div className="flex h-screen items-center justify-center">Loading...</div>;
   }
 
@@ -174,8 +176,8 @@ function DashboardLayout() {
                   className="overflow-hidden rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : userRole === 'faculty' ? 'faculty portrait' : 'student portrait'} />
-                      <AvatarFallback>{userRole === 'admin' ? 'AD' : userRole === 'faculty' ? 'FC' : 'SD'}</AvatarFallback>
+                      <AvatarImage src={user.avatar || "https://placehold.co/100x100.png"} alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : userRole === 'faculty' ? 'faculty portrait' : 'student portrait'} />
+                      <AvatarFallback>{user.name ? user.name.split(' ').map((n:string) => n[0]).join('') : 'U'}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -204,7 +206,7 @@ function DashboardLayout() {
           </div>
           {userRole === 'student' && (
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
-              <ProfileCard />
+              <ProfileCard user={user}/>
             </div>
           )}
         </div>
@@ -212,13 +214,5 @@ function DashboardLayout() {
       
       {userRole === 'student' && <Chatbot />}
     </div>
-  );
-}
-
-export default function DashboardPage() {
-  return (
-    <UserProvider>
-      <DashboardLayout />
-    </UserProvider>
   );
 }
