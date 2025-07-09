@@ -181,7 +181,7 @@ const tomHollandFeeData = {
 
 
 const initialStudentsRaw = [
-    { id: "STU-DEMO", name: "Tom Holland", email: "tom.holland@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8hsKfjJ1NIX2pFB2PH4JQZdakiP-HWYg2Uw&s", dob: "01-06-1996", contact: "+44 1234567890", parentContact: "+44 1234567891", semester: 4, username: 'tom.holland', password: 'demo', gender: 'male', section: 'A', city: 'London', state: 'UK' },
+    { id: "STU-DEMO", name: "Tom Holland", email: "tom.holland@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "01-06-1996", contact: "+44 1234567890", parentContact: "+44 1234567891", semester: 4, username: 'tom.holland', password: 'demo', gender: 'male', section: 'A', city: 'London', state: 'UK' },
     { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AP", dob: "12-05-2003", contact: "+91 9876543210", parentContact: "+91 9876543211", semester: 4, username: 'aarav.patel', password: 'password', gender: 'male', section: 'A', city: 'Mumbai', state: 'Maharashtra' },
     { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AS", dob: "22-08-2003", contact: "+91 9876543212", parentContact: "+91 9876543213", semester: 4, username: 'aditi.sharma', password: 'password', gender: 'female', section: 'B', city: 'Delhi', state: 'Delhi' },
     { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AK", dob: "05-11-2002", contact: "+91 9876543214", parentContact: "+91 9876543215", semester: 4, username: 'arjun.kumar', password: 'password', gender: 'male', section: 'A', city: 'Bangalore', state: 'Karnataka' },
@@ -211,7 +211,7 @@ const initialStudents: Student[] = initialStudentsRaw.map(student => {
 
 
 const initialTeachers: Teacher[] = [
-    { id: "FAC-DEMO", name: "Dr. Anthony Stark", email: "tony.stark@university.edu", department: "Robotics & AI", avatar: "https://placehold.co/100x100.png", username: 'tony.stark', password: 'demo' },
+    { id: "FAC-DEMO", name: "Dr. Robert Downey", email: "robert.downey@university.edu", department: "Computer Science", avatar: "https://placehold.co/100x100.png", username: 'robert.downey', password: 'demo' },
     { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science", avatar: "https://placehold.co/100x100.png?text=MI", username: 'meera.iyer', password: 'password' },
     { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence", avatar: "https://placehold.co/100x100.png?text=RM", username: 'rajeev.menon', password: 'password' },
     { id: "FAC-003", name: "Prof. Sunita Sharma", email: "sunita.sharma@university.edu", department: "Machine Learning", avatar: "https://placehold.co/100x100.png?text=SS", username: 'sunita.sharma', password: 'password' },
