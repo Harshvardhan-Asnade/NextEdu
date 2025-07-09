@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -11,47 +12,47 @@ import { Label } from "@/components/ui/label";
 import { PlusCircle, UserPlus, Trash2, Edit } from "lucide-react";
 
 const initialStudents = [
-    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-004", name: "Diya Singh", email: "diya.singh@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-005", name: "Ishaan Gupta", email: "ishaan.gupta@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-006", name: "Kavya Reddy", email: "kavya.reddy@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-007", name: "Mohammed Khan", email: "mohammed.khan@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-008", name: "Myra Desai", email: "myra.desai@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-009", name: "Riya Verma", email: "riya.verma@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-010", name: "Rohan Mehta", email: "rohan.mehta@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-011", name: "Saanvi Joshi", email: "saanvi.joshi@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-012", name: "Vihaan Iyer", email: "vihaan.iyer@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-013", name: "Zara Begum", email: "zara.begum@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-014", name: "Advik Nair", email: "advik.nair@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-015", name: "Ananya Rao", email: "ananya.rao@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-016", name: "Aryan Mishra", email: "aryan.mishra@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-017", name: "Ishani Das", email: "ishani.das@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-018", name: "Kabir Chawla", email: "kabir.chawla@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-019", name: "Kiara Malhotra", email: "kiara.malhotra@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-020", name: "Vivaan Jain", email: "vivaan.jain@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-021", name: "Shanaya Kapoor", email: "shanaya.kapoor@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-022", name: "Reyansh Tiwari", email: "reyansh.tiwari@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-023", name: "Anika Reddy", email: "anika.reddy@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-024", name: "Krish Patel", email: "krish.patel@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-025", name: "Pari Saxena", email: "pari.saxena@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-026", name: "Sai Kumar", email: "sai.kumar@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-027", name: "Tara Menon", email: "tara.menon@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-028", name: "Yuvraj Singh", email: "yuvraj.singh@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-029", name: "Aanya Gupta", email: "aanya.gupta@university.edu", course: "B.Tech CSE (AI/ML)" },
-    { id: "STU-030", name: "Zoya Ali", email: "zoya.ali@university.edu", course: "B.Tech CSE (AI/ML)" },
+    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-004", name: "Diya Singh", email: "diya.singh@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-005", name: "Ishaan Gupta", email: "ishaan.gupta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-006", name: "Kavya Reddy", email: "kavya.reddy@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-007", name: "Mohammed Khan", email: "mohammed.khan@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-008", name: "Myra Desai", email: "myra.desai@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-009", name: "Riya Verma", email: "riya.verma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-010", name: "Rohan Mehta", email: "rohan.mehta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-011", name: "Saanvi Joshi", email: "saanvi.joshi@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-012", name: "Vihaan Iyer", email: "vihaan.iyer@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-013", name: "Zara Begum", email: "zara.begum@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-014", name: "Advik Nair", email: "advik.nair@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-015", name: "Ananya Rao", email: "ananya.rao@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-016", name: "Aryan Mishra", email: "aryan.mishra@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-017", name: "Ishani Das", email: "ishani.das@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-018", name: "Kabir Chawla", email: "kabir.chawla@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-019", name: "Kiara Malhotra", email: "kiara.malhotra@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-020", name: "Vivaan Jain", email: "vivaan.jain@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-021", name: "Shanaya Kapoor", email: "shanaya.kapoor@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-022", name: "Reyansh Tiwari", email: "reyansh.tiwari@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-023", name: "Anika Reddy", email: "anika.reddy@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-024", name: "Krish Patel", email: "krish.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-025", name: "Pari Saxena", email: "pari.saxena@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-026", name: "Sai Kumar", email: "sai.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-027", name: "Tara Menon", email: "tara.menon@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-028", name: "Yuvraj Singh", email: "yuvraj.singh@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-029", name: "Aanya Gupta", email: "aanya.gupta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
+    { id: "STU-030", name: "Zoya Ali", email: "zoya.ali@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/40x40.png" },
 ];
 
 const initialTeachers = [
-    { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science" },
-    { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence" },
-    { id: "FAC-003", name: "Prof. Sunita Sharma", email: "sunita.sharma@university.edu", department: "Machine Learning" },
-    { id: "FAC-004", name: "Dr. Anil Kumar", email: "anil.kumar@university.edu", department: "Data Structures" },
-    { id: "FAC-005", name: "Prof. Priya Das", email: "priya.das@university.edu", department: "Algorithms" },
-    { id: "FAC-006", name: "Dr. Sanjay Gupta", email: "sanjay.gupta@university.edu", department: "Database Systems" },
-    { id: "FAC-007", name: "Prof. Geeta Reddy", email: "geeta.reddy@university.edu", department: "Web Development" },
-    { id: "FAC-008", name: "Dr. Ashok Verma", email: "ashok.verma@university.edu", department: "Operating Systems" },
+    { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-003", name: "Prof. Sunita Sharma", email: "sunita.sharma@university.edu", department: "Machine Learning", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-004", name: "Dr. Anil Kumar", email: "anil.kumar@university.edu", department: "Data Structures", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-005", name: "Prof. Priya Das", email: "priya.das@university.edu", department: "Algorithms", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-006", name: "Dr. Sanjay Gupta", email: "sanjay.gupta@university.edu", department: "Database Systems", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-007", name: "Prof. Geeta Reddy", email: "geeta.reddy@university.edu", department: "Web Development", avatar: "https://placehold.co/40x40.png" },
+    { id: "FAC-008", name: "Dr. Ashok Verma", email: "ashok.verma@university.edu", department: "Operating Systems", avatar: "https://placehold.co/40x40.png" },
 ];
 
 export function AdminPanel() {
@@ -62,7 +63,7 @@ export function AdminPanel() {
     const [dialogMode, setDialogMode] = useState<'add' | 'edit'>('add');
     const [dialogType, setDialogType] = useState<'student' | 'teacher'>('student');
     const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [formData, setFormData] = useState({ name: '', email: '', roleSpecific: '' });
+    const [formData, setFormData] = useState({ name: '', email: '', roleSpecific: '', avatar: '' });
 
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState<{ user: any, type: 'student' | 'teacher' } | null>(null);
@@ -72,10 +73,10 @@ export function AdminPanel() {
         setDialogType(type);
         if (mode === 'edit' && user) {
             setSelectedUser(user);
-            setFormData({ name: user.name, email: user.email, roleSpecific: user.course || user.department });
+            setFormData({ name: user.name, email: user.email, roleSpecific: user.course || user.department, avatar: user.avatar || '' });
         } else {
             setSelectedUser(null);
-            setFormData({ name: '', email: '', roleSpecific: '' });
+            setFormData({ name: '', email: '', roleSpecific: '', avatar: '' });
         }
         setIsDialogOpen(true);
     };
@@ -87,7 +88,6 @@ export function AdminPanel() {
 
     const handleSave = () => {
         if (!formData.name || !formData.email || !formData.roleSpecific) {
-            // Basic validation
             alert("Please fill all fields.");
             return;
         }
@@ -96,6 +96,7 @@ export function AdminPanel() {
                 id: `${dialogType === 'student' ? 'STU' : 'FAC'}-${Math.floor(100 + Math.random() * 900)}`,
                 name: formData.name,
                 email: formData.email,
+                avatar: formData.avatar || 'https://placehold.co/40x40.png',
                 ...(dialogType === 'student' ? { course: formData.roleSpecific } : { department: formData.roleSpecific })
             };
             if (dialogType === 'student') {
@@ -104,10 +105,20 @@ export function AdminPanel() {
                 setTeachers(prev => [newUser, ...prev]);
             }
         } else { // edit mode
+            const updatedUser = {
+                ...selectedUser,
+                name: formData.name,
+                email: formData.email,
+                avatar: formData.avatar,
+                ...(dialogType === 'student'
+                    ? { course: formData.roleSpecific }
+                    : { department: formData.roleSpecific }
+                )
+            };
             if (dialogType === 'student') {
-                setStudents(prev => prev.map(s => s.id === selectedUser.id ? { ...s, name: formData.name, email: formData.email, course: formData.roleSpecific } : s));
+                setStudents(prev => prev.map(s => s.id === selectedUser.id ? updatedUser : s));
             } else {
-                setTeachers(prev => prev.map(t => t.id === selectedUser.id ? { ...t, name: formData.name, email: formData.email, department: formData.roleSpecific } : t));
+                setTeachers(prev => prev.map(t => t.id === selectedUser.id ? updatedUser : t));
             }
         }
         setIsDialogOpen(false);
@@ -147,6 +158,10 @@ export function AdminPanel() {
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="roleSpecific" className="text-right">{dialogType === 'student' ? 'Course' : 'Department'}</Label>
                         <Input id="roleSpecific" value={formData.roleSpecific} onChange={handleFormChange} className="col-span-3" placeholder={dialogType === 'student' ? 'e.g. B.Tech CSE' : 'e.g. Computer Science'}/>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="avatar" className="text-right">Avatar URL</Label>
+                        <Input id="avatar" value={formData.avatar} onChange={handleFormChange} className="col-span-3" placeholder="https://..."/>
                     </div>
                 </div>
                 <DialogFooter>
@@ -203,7 +218,15 @@ export function AdminPanel() {
                                 {students.map((student) => (
                                     <TableRow key={student.id}>
                                         <TableCell className="font-medium">{student.id}</TableCell>
-                                        <TableCell>{student.name}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="h-8 w-8">
+                                                    <AvatarImage src={student.avatar} alt={student.name} data-ai-hint="student portrait" />
+                                                    <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="font-medium">{student.name}</div>
+                                            </div>
+                                        </TableCell>
                                         <TableCell>{student.email}</TableCell>
                                         <TableCell>{student.course}</TableCell>
                                         <TableCell className="text-right space-x-1">
@@ -247,7 +270,15 @@ export function AdminPanel() {
                             {teachers.map((teacher) => (
                                 <TableRow key={teacher.id}>
                                     <TableCell className="font-medium">{teacher.id}</TableCell>
-                                    <TableCell>{teacher.name}</TableCell>
+                                    <TableCell>
+                                         <div className="flex items-center gap-3">
+                                            <Avatar className="h-8 w-8">
+                                                <AvatarImage src={teacher.avatar} alt={teacher.name} data-ai-hint="faculty portrait" />
+                                                <AvatarFallback>{teacher.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="font-medium">{teacher.name}</div>
+                                        </div>
+                                    </TableCell>
                                     <TableCell>{teacher.email}</TableCell>
                                     <TableCell>{teacher.department}</TableCell>
                                     <TableCell className="text-right space-x-1">

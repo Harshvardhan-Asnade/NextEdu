@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { BarChart3, CreditCard, GraduationCap, Hexagon, Home as HomeIcon, LogOut, PanelLeft, Shield } from 'lucide-react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { AttendanceModule } from '@/components/dashboard/attendance-module';
 import { Chatbot } from '@/components/dashboard/chatbot';
@@ -62,7 +61,7 @@ export default function DashboardPage() {
   };
 
   const baseNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: HomeIcon },
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'attendance', label: 'Attendance', icon: BarChart3 },
     { id: 'exam', label: 'Exam', icon: GraduationCap },
     { id: 'fees', label: 'Fees', icon: CreditCard },
@@ -70,70 +69,44 @@ export default function DashboardPage() {
 
   const adminNavItem = { id: 'admin', label: 'Admin Panel', icon: Shield };
 
-  const navItems = userRole === 'admin' ? [adminNavItem, ...baseNavItems.filter(item => item.id !== 'dashboard')] : baseNavItems;
+  const navItems = userRole === 'admin' ? [adminNavItem, ...baseNavItems.filter(item => !['dashboard'].includes(item.id))] : baseNavItems;
 
   if (!userRole) {
     return <div className="flex h-screen items-center justify-center">Loading...</div>;
   }
 
   return (
-    <TooltipProvider>
-      <div className="flex min-h-screen w-full bg-transparent animate-in fade-in duration-500">
-        <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-card/60 backdrop-blur-xl border-white/10 sm:flex">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link href="#" className="flex items-center gap-2 font-semibold">
-              <Hexagon className="h-6 w-6 text-primary" />
-              <span className="text-foreground">NextEdu</span>
-            </Link>
-          </div>
-          <div className="flex flex-1 flex-col justify-between">
-            <nav className="flex flex-col items-center gap-4 px-2 py-4">
-              {navItems.map((item) => (
-                <Tooltip key={item.id}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={activeView === item.id ? 'default' : 'ghost'}
-                      size="icon"
-                      className={`rounded-lg w-10 h-10 transition-colors ${activeView === item.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
-                      onClick={() => setActiveView(item.id)}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span className="sr-only">{item.label}</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">{item.label}</TooltipContent>
-                </Tooltip>
-              ))}
-            </nav>
-            <nav className="flex flex-col items-center gap-4 px-2 py-4">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant='ghost'
-                    size="icon"
-                    className='rounded-lg w-10 h-10 transition-colors text-muted-foreground'
-                    onClick={handleLogout}
-                  >
-                    <LogOut className="h-5 w-5" />
-                    <span className="sr-only">Logout</span>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">Logout</TooltipContent>
-              </Tooltip>
-            </nav>
-          </div>
-        </aside>
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background/60 backdrop-blur-xl px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button size="icon" variant="outline" className="sm:hidden">
-                  <PanelLeft className="h-5 w-5" />
-                  <span className="sr-only">Toggle Menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="sm:max-w-xs bg-card/80 backdrop-blur-xl">
-                <nav className="grid gap-6 text-lg font-medium">
+    <div className="flex min-h-screen w-full flex-col bg-transparent animate-in fade-in duration-500">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-xl px-4 md:px-6 z-50">
+        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+          <Link href="#" className="flex items-center gap-2 font-semibold text-lg md:text-base">
+            <Hexagon className="h-6 w-6 text-primary" />
+            <span className="text-foreground">NextEdu</span>
+          </Link>
+          {navItems.map(item => (
+            <Button
+              key={item.id}
+              variant="ghost"
+              className={cn(
+                "transition-colors hover:text-foreground",
+                activeView === item.id ? "text-foreground font-semibold border-b-2 border-primary rounded-none" : "text-muted-foreground"
+              )}
+              onClick={() => setActiveView(item.id)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </nav>
+        
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+              <PanelLeft className="h-5 w-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="sm:max-w-xs bg-card/80 backdrop-blur-xl">
+             <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="#"
                   className="group flex items-center gap-2 text-lg font-semibold"
@@ -145,7 +118,7 @@ export default function DashboardPage() {
                     <Button
                       key={item.id}
                       variant={activeView === item.id ? 'default' : 'ghost'}
-                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                      className="flex items-center justify-start gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                       onClick={() => {
                         setActiveView(item.id);
                         const trigger = document.querySelector('[data-radix-sheet-trigger]');
@@ -158,7 +131,7 @@ export default function DashboardPage() {
                   ))}
                   <Button
                     variant='ghost'
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    className="flex items-center justify-start gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                     onClick={() => {
                       handleLogout();
                        const trigger = document.querySelector('[data-radix-sheet-trigger]');
@@ -169,50 +142,54 @@ export default function DashboardPage() {
                     Logout
                   </Button>
                 </nav>
-              </SheetContent>
-            </Sheet>
-            <h1 className="text-xl font-semibold capitalize">{activeView === 'admin' ? 'Admin Panel' : activeView}</h1>
-            <div className="ml-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="overflow-hidden rounded-full"
-                  >
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : 'student portrait'} />
-                        <AvatarFallback>{userRole === 'admin' ? 'AD' : 'SD'}</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => toast({ title: "Coming Soon!", description: "Settings page is under construction."})}>Settings</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => toast({ title: "Support", description: "Contact support@neoedu.edu for help."})}>Support</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </header>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-            <div className={cn(
-              "grid auto-rows-max items-start gap-4 md:gap-8",
-              userRole === 'admin' ? "lg:col-span-3" : "lg:col-span-2"
-            )}>
-              {renderContent()}
-            </div>
-            {userRole !== 'admin' && (
-              <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
-                <ProfileCard />
-              </div>
-            )}
-          </main>
+          </SheetContent>
+        </Sheet>
+        
+        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-end">
+          <div className="ml-auto flex-initial">
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <Avatar className="h-8 w-8">
+                      <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint={userRole === 'admin' ? 'administrator' : 'student portrait'} />
+                      <AvatarFallback>{userRole === 'admin' ? 'AD' : 'SD'}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => toast({ title: "Coming Soon!", description: "Settings page is under construction."})}>Settings</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => toast({ title: "Support", description: "Contact support@neoedu.edu for help."})}>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-        {userRole !== 'admin' && <Chatbot />}
-      </div>
-    </TooltipProvider>
+      </header>
+
+      <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+        <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+          <div className={cn(
+            "grid auto-rows-max items-start gap-4 md:gap-8",
+            userRole === 'admin' ? "lg:col-span-3" : "lg:col-span-2"
+          )}>
+            {renderContent()}
+          </div>
+          {userRole !== 'admin' && (
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
+              <ProfileCard />
+            </div>
+          )}
+        </div>
+      </main>
+      
+      {userRole !== 'admin' && <Chatbot />}
+    </div>
   );
 }
