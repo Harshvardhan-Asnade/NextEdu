@@ -86,7 +86,7 @@ export default function DashboardPage() {
               className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
             >
               <Hexagon className="h-5 w-5 transition-all group-hover:scale-110 group-hover:rotate-12" />
-              <span className="sr-only">Nexus Dashboard</span>
+              <span className="sr-only">NeoEdu</span>
             </Link>
             <div className="flex flex-col items-center gap-4">
               {navItems.map((item) => (
@@ -140,7 +140,7 @@ export default function DashboardPage() {
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground"
                 >
                   <Hexagon className="h-6 w-6 transition-all group-hover:scale-110 group-hover:rotate-12" />
-                  <span className="sr-only">Nexus Dashboard</span>
+                  <span className="sr-only">NeoEdu</span>
                 </Link>
                   {navItems.map((item) => (
                     <Button
@@ -191,7 +191,7 @@ export default function DashboardPage() {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => toast({ title: "Coming Soon!", description: "Settings page is under construction."})}>Settings</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => toast({ title: "Support", description: "Contact support@nexus.edu for help."})}>Support</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast({ title: "Support", description: "Contact support@neoedu.edu for help."})}>Support</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>

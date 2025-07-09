@@ -19,7 +19,7 @@ interface Message {
 export function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hello! How can I help you today regarding admissions, exams, or fees?", sender: "bot" }
+        { id: 1, text: "Hello! I am the NeoEdu assistant. How can I help you today regarding admissions, exams, or fees?", sender: "bot" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -73,10 +73,10 @@ export function Chatbot() {
                             <div className="flex items-center space-x-4">
                                 <Avatar>
                                     <AvatarImage src="https://placehold.co/40x40.png" alt="Bot Avatar" data-ai-hint="robot" />
-                                    <AvatarFallback>BOT</AvatarFallback>
+                                    <AvatarFallback>NA</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="text-sm font-medium leading-none">Nexus Assistant</p>
+                                    <p className="text-sm font-medium leading-none">NeoEdu Assistant</p>
                                     <p className="text-sm text-muted-foreground">AI Powered</p>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@ export function Chatbot() {
                                         <div className="flex items-center space-x-2">
                                             <Avatar className="h-8 w-8">
                                                  <AvatarImage src="https://placehold.co/40x40.png" alt="Bot Avatar" data-ai-hint="robot" />
-                                                <AvatarFallback>BOT</AvatarFallback>
+                                                <AvatarFallback>NA</AvatarFallback>
                                             </Avatar>
                                             <div className="flex items-center gap-1">
                                                 <span className="h-2 w-2 rounded-full bg-slate-400 animate-bounce [animation-delay:-0.3s]"></span>

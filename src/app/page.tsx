@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
-import { Loader2, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
+import { LoadingScreen } from '@/components/loading-screen';
 
 const Illustration = () => (
     <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
@@ -83,13 +84,14 @@ export default function ModernLoginPage() {
             } else {
                 setIsLoading(false);
             }
-        }, 1500);
+        }, 2000);
     };
     
     const welcomeText = `Welcome ${role.charAt(0).toUpperCase() + role.slice(1)}`;
 
     return (
         <div className="min-h-screen w-full lg:grid lg:grid-cols-2 bg-background animate-in fade-in duration-500">
+            {isLoading && <LoadingScreen />}
             <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto w-full max-w-sm space-y-6">
                     <div>
@@ -157,7 +159,7 @@ export default function ModernLoginPage() {
                         )}
                         
                         <Button type="submit" className="w-full h-11 transition-all duration-300" disabled={isLoading}>
-                            {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Sign In'}
+                            Sign In
                         </Button>
                         
                     </form>

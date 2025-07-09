@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'chatbotStudentQueriesPrompt',
   input: {schema: ChatbotStudentQueriesInputSchema},
   output: {schema: ChatbotStudentQueriesOutputSchema},
-  prompt: `You are a helpful AI chatbot assistant for Nexus University. Your goal is to answer student questions accurately, succinctly and informatively based on the information provided below.
+  prompt: `You are a helpful AI chatbot assistant for NeoEdu University. Your goal is to answer student questions accurately, succinctly and informatively based on the information provided below.
 
   If the user asks a question you cannot answer with the provided information, politely state that you do not have that information and suggest they contact the university administration.
 
@@ -39,7 +39,7 @@ const prompt = ai.definePrompt({
   - B.Tech CSE (AI/ML) Admissions for Fall 2024 are currently open.
   - Deadline for application: August 15, 2024.
   - Required documents: High school transcripts, national entrance exam scores, statement of purpose.
-  - Admission inquiries can be sent to admissions@nexus.edu.
+  - Admission inquiries can be sent to admissions@neoedu.edu.
 
   **Exam Dates:**
   - Semester 4 Mid-term exams: October 5-12, 2024.

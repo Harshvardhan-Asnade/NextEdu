@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Nexus Dashboard',
-  description: 'Modern Student Dashboard for Nexus University',
+  title: 'NeoEdu',
+  description: 'Next-gen education dashboard. by harshvardhan',
 };
 
 export default function RootLayout({
