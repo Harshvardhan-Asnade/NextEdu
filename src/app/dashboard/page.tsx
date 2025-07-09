@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid, Bell, Sun, Moon } from 'lucide-react';
-import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -22,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Chatbot } from '@/components/dashboard/chatbot';
+import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -49,7 +49,7 @@ export default function DashboardPage() {
   
   const userRole = user?.role;
 
-  const renderContent = () => {
+  const renderMainContent = () => {
     if (!user) return null;
 
     if (userRole === 'faculty') return <FacultyDashboard user={user} />;
@@ -223,26 +223,48 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
-
+      
       <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className={cn(
-            "grid auto-rows-max items-start gap-4 md:gap-8 lg:order-first",
-            userRole === 'student' ? (activeView === 'dashboard' ? 'order-first' : 'order-last') : '',
-            userRole === 'student' ? "lg:col-span-2" : "lg:col-span-3"
-          )}>
-            <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-              {renderContent()}
-            </div>
-          </div>
-          {userRole === 'student' && (
-            <div className={cn(
-              "grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 lg:order-last",
-              activeView === 'dashboard' ? 'order-last' : 'order-first'
-            )}>
-              <ProfileCard user={user}/>
-            </div>
-          )}
+        <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3">
+            {!(userRole === 'student' && activeView === 'dashboard') ? (
+                <>
+                    <div className={cn(
+                        "grid auto-rows-max items-start gap-4 md:gap-8",
+                        userRole === 'student' ? 'lg:col-span-2' : 'lg:col-span-3'
+                    )}>
+                        <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+                            {renderMainContent()}
+                        </div>
+                    </div>
+                    {userRole === 'student' && (
+                        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
+                            <ProfileCard user={user}/>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    {/* Welcome Card */}
+                    <div className="order-1 lg:col-span-2 lg:order-1">
+                        <Card className="glass-card text-center p-6">
+                            <CardTitle className="text-3xl">Welcome back, {user.name.split(' ')[0]}!</CardTitle>
+                            <CardDescription>Here's a quick look at your academic dashboard.</CardDescription>
+                        </Card>
+                    </div>
+                    
+                    {/* Profile Card */}
+                    <div className="order-2 lg:col-span-1 lg:row-span-2 lg:order-2">
+                        <ProfileCard user={user}/>
+                    </div>
+                    
+                    {/* Rest of Dashboard Content */}
+                    <div className="order-3 lg:col-span-2 lg:order-3">
+                        <div key={activeView} className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+                            <DashboardOverview user={user} />
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
         {userRole === 'student' && <Chatbot />}
       </main>

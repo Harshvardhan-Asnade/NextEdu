@@ -33,11 +33,6 @@ export function DashboardOverview({ user }: { user: Student }) {
 
     return (
         <div className="space-y-4">
-            <Card className="glass-card text-center p-6">
-                 <CardTitle className="text-3xl">Welcome back, {user.name.split(' ')[0]}!</CardTitle>
-                 <CardDescription>Here's a quick look at your academic dashboard.</CardDescription>
-            </Card>
-
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="glass-card">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
