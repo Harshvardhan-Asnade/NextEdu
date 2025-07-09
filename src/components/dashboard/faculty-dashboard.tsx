@@ -15,7 +15,7 @@ import { Separator } from '../ui/separator';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
-import { useUser } from '@/context/UserContext';
+import { useUser, Teacher } from '@/context/UserContext';
 
 const initialUpcomingClasses = [
     { time: "10:00 AM - 11:00 AM", subject: "Advanced Algorithms", class: "CS-301", type: "Theory" },
@@ -40,7 +40,7 @@ const initialAnnouncements = [
     { id: 2, by: "Dr. Meera Iyer", content: "I've uploaded the notes for today's lecture on NP-Completeness. You can find them in the study materials section.", time: "8h ago" },
 ]
 
-export function FacultyDashboard() {
+export function FacultyDashboard({ user }: { user: Teacher }) {
     const { students: allStudents } = useUser();
     const { toast } = useToast();
     const [assignments, setAssignments] = useState(initialAssignments);
@@ -60,7 +60,7 @@ export function FacultyDashboard() {
         if (!newAnnouncement.trim()) return;
         const announcement = {
             id: Date.now(),
-            by: "Dr. Rajeev Menon",
+            by: user.name,
             content: newAnnouncement,
             time: "Just now"
         };
@@ -245,11 +245,11 @@ export function FacultyDashboard() {
                 <Card className="glass-card text-center">
                     <CardHeader className="items-center">
                         <Avatar className="h-24 w-24 border-2 border-primary mb-2">
-                            <AvatarImage src="https://placehold.co/128x128.png" alt="Faculty Avatar" data-ai-hint="faculty portrait" />
-                            <AvatarFallback>RM</AvatarFallback>
+                            <AvatarImage src={user.avatar} alt="Faculty Avatar" data-ai-hint="faculty portrait" />
+                            <AvatarFallback>{user.name.split(' ').map((n:string) => n[0]).join('')}</AvatarFallback>
                         </Avatar>
-                        <CardTitle>Dr. Rajeev Menon</CardTitle>
-                        <CardDescription>Associate Professor, Artificial Intelligence</CardDescription>
+                        <CardTitle>{user.name}</CardTitle>
+                        <CardDescription>{user.department}</CardDescription>
                     </CardHeader>
                 </Card>
 

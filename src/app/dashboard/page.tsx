@@ -50,7 +50,7 @@ export default function DashboardPage() {
   const renderContent = () => {
     if (!user) return null;
 
-    if (userRole === 'faculty') return <FacultyDashboard />;
+    if (userRole === 'faculty') return <FacultyDashboard user={user} />;
     if (userRole === 'admin') return <AdminPanel />;
 
     switch (activeView) {
