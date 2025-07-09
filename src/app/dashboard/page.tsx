@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { cn } from '@/lib/utils';
 import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
+import { Chatbot } from '@/components/dashboard/chatbot';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -168,7 +169,8 @@ export default function DashboardPage() {
         </Sheet>
         
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-end">
-          <div className="ml-auto flex-initial">
+           {userRole === 'student' && <Chatbot />}
+          <div className="flex-initial">
              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
