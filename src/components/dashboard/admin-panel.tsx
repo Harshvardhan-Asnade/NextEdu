@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, UserPlus, Trash2, Edit, UserCheck, UserX } from "lucide-react";
-import { useUser, PendingStudent, Student } from "@/context/UserContext";
+import { useUser, PendingStudent, Student, feeData } from "@/context/UserContext";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { generateRandomHistory } from "@/lib/utils";
@@ -60,7 +60,7 @@ export function AdminPanel() {
                 avatar: formData.avatar || 'https://placehold.co/40x40.png',
                 username: formData.name.toLowerCase().replace(' ', '.'),
                 password: 'password',
-                ...(dialogType === 'student' ? { course: formData.roleSpecific, semester: 1, dob: 'N/A', contact: 'N/A', parentContact: 'N/A', academicHistory: generateRandomHistory(1) } : { department: formData.roleSpecific })
+                ...(dialogType === 'student' ? { course: formData.roleSpecific, semester: 1, dob: 'N/A', contact: 'N/A', parentContact: 'N/A', gender: 'N/A', section: 'N/A', city: 'N/A', state: 'N/A', academicHistory: generateRandomHistory(1), fees: feeData } : { department: formData.roleSpecific })
             };
             if (dialogType === 'student') {
                 setStudents(prev => [newUser as Student, ...prev]);
@@ -113,12 +113,17 @@ export function AdminPanel() {
             course: pendingStudent.programName,
             avatar: pendingStudent.profilePhoto ? URL.createObjectURL(pendingStudent.profilePhoto) : `https://placehold.co/100x100.png?text=${pendingStudent.fullName.split(' ').map(n=>n[0]).join('')}`,
             dob: pendingStudent.dob ? format(pendingStudent.dob, 'dd-MM-yyyy') : 'N/A',
+            gender: pendingStudent.gender,
+            section: pendingStudent.section,
+            city: pendingStudent.city,
+            state: pendingStudent.state,
             contact: pendingStudent.studentMobile,
             parentContact: pendingStudent.parentMobile,
             semester: startSemester,
             username: pendingStudent.username,
             password: pendingStudent.password,
-            academicHistory: generateRandomHistory(startSemester)
+            academicHistory: generateRandomHistory(startSemester),
+            fees: feeData,
         };
         setStudents(prev => [newStudent, ...prev]);
         setPendingStudents(prev => prev.filter(s => s.username !== pendingStudent.username));

@@ -76,6 +76,10 @@ export interface Student {
     course: string;
     avatar: string;
     dob: string;
+    gender: string;
+    section: string;
+    city: string;
+    state: string;
     contact: string;
     parentContact: string;
     semester: number;
@@ -110,7 +114,7 @@ interface UserContextType {
     setPendingStudents: React.Dispatch<React.SetStateAction<PendingStudent[]>>;
 }
 
-const feeData = {
+export const feeData = {
     summary: [
         { head: "Tuition Fee", toPay: 125000, paid: 125000, inProcess: 0, outstanding: 0, dueDate: "10-07-2024" },
         { head: "Exam Fee", toPay: 2500, paid: 0, inProcess: 0, outstanding: 2500, dueDate: "25-07-2024" },
@@ -130,16 +134,16 @@ const feeData = {
 
 
 const initialStudentsRaw = [
-    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "12-05-2003", contact: "+91 9876543210", parentContact: "+91 9876543211", semester: 4, username: 'aarav.patel', password: 'password' },
-    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "22-08-2003", contact: "+91 9876543212", parentContact: "+91 9876543213", semester: 4, username: 'aditi.sharma', password: 'password' },
-    { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "05-11-2002", contact: "+91 9876543214", parentContact: "+91 9876543215", semester: 4, username: 'arjun.kumar', password: 'password' },
-    { id: "STU-004", name: "Diya Singh", email: "diya.singh@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "19-02-2003", contact: "+91 9876543216", parentContact: "+91 9876543217", semester: 3, username: 'diya.singh', password: 'password' },
-    { id: "STU-005", name: "Ishaan Gupta", email: "ishaan.gupta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "30-07-2003", contact: "+91 9876543218", parentContact: "+91 9876543219", semester: 3, username: 'ishaan.gupta', password: 'password' },
-    { id: "STU-006", name: "Kavya Reddy", email: "kavya.reddy@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "14-04-2003", contact: "+91 9876543220", parentContact: "+91 9876543221", semester: 4, username: 'kavya.reddy', password: 'password' },
-    { id: "STU-007", name: "Mohammed Khan", email: "mohammed.khan@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "25-09-2002", contact: "+91 9876543222", parentContact: "+91 9876543223", semester: 3, username: 'mohammed.khan', password: 'password' },
-    { id: "STU-008", name: "Myra Desai", email: "myra.desai@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "08-12-2003", contact: "+91 9876543224", parentContact: "+91 9876543225", semester: 3, username: 'myra.desai', password: 'password' },
-    { id: "STU-009", name: "Riya Verma", email: "riya.verma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "03-01-2004", contact: "+91 9876543226", parentContact: "+91 9876543227", semester: 2, username: 'riya.verma', password: 'password' },
-    { id: "STU-010", name: "Rohan Mehta", email: "rohan.mehta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "18-06-2003", contact: "+91 9876543228", parentContact: "+91 9876543229", semester: 3, username: 'rohan.mehta', password: 'password' },
+    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "12-05-2003", contact: "+91 9876543210", parentContact: "+91 9876543211", semester: 4, username: 'aarav.patel', password: 'password', gender: 'male', section: 'A', city: 'Mumbai', state: 'Maharashtra' },
+    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "22-08-2003", contact: "+91 9876543212", parentContact: "+91 9876543213", semester: 4, username: 'aditi.sharma', password: 'password', gender: 'female', section: 'B', city: 'Delhi', state: 'Delhi' },
+    { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "05-11-2002", contact: "+91 9876543214", parentContact: "+91 9876543215", semester: 4, username: 'arjun.kumar', password: 'password', gender: 'male', section: 'A', city: 'Bangalore', state: 'Karnataka' },
+    { id: "STU-004", name: "Diya Singh", email: "diya.singh@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "19-02-2003", contact: "+91 9876543216", parentContact: "+91 9876543217", semester: 3, username: 'diya.singh', password: 'password', gender: 'female', section: 'C', city: 'Kolkata', state: 'West Bengal' },
+    { id: "STU-005", name: "Ishaan Gupta", email: "ishaan.gupta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "30-07-2003", contact: "+91 9876543218", parentContact: "+91 9876543219", semester: 3, username: 'ishaan.gupta', password: 'password', gender: 'male', section: 'B', city: 'Chennai', state: 'Tamil Nadu' },
+    { id: "STU-006", name: "Kavya Reddy", email: "kavya.reddy@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "14-04-2003", contact: "+91 9876543220", parentContact: "+91 9876543221", semester: 4, username: 'kavya.reddy', password: 'password', gender: 'female', section: 'A', city: 'Hyderabad', state: 'Telangana' },
+    { id: "STU-007", name: "Mohammed Khan", email: "mohammed.khan@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "25-09-2002", contact: "+91 9876543222", parentContact: "+91 9876543223", semester: 3, username: 'mohammed.khan', password: 'password', gender: 'male', section: 'C', city: 'Pune', state: 'Maharashtra' },
+    { id: "STU-008", name: "Myra Desai", email: "myra.desai@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "08-12-2003", contact: "+91 9876543224", parentContact: "+91 9876543225", semester: 3, username: 'myra.desai', password: 'password', gender: 'female', section: 'B', city: 'Ahmedabad', state: 'Gujarat' },
+    { id: "STU-009", name: "Riya Verma", email: "riya.verma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "03-01-2004", contact: "+91 9876543226", parentContact: "+91 9876543227", semester: 2, username: 'riya.verma', password: 'password', gender: 'female', section: 'A', city: 'Jaipur', state: 'Rajasthan' },
+    { id: "STU-010", name: "Rohan Mehta", email: "rohan.mehta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png", dob: "18-06-2003", contact: "+91 9876543228", parentContact: "+91 9876543229", semester: 3, username: 'rohan.mehta', password: 'password', gender: 'male', section: 'C', city: 'Lucknow', state: 'Uttar Pradesh' },
 ];
 
 const initialStudents: Student[] = initialStudentsRaw.map(student => ({

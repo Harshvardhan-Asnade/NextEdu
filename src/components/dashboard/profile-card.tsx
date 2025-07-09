@@ -56,6 +56,7 @@ export function ProfileCard({ user }: { user: any }) {
                 <div className="flex gap-2 flex-wrap justify-center">
                      <Badge variant="secondary">{user.course}</Badge>
                      <Badge variant="secondary">Sem {user.semester}</Badge>
+                     <Badge variant="secondary">Sec {user.section}</Badge>
                 </div>
             </CardHeader>
             <CardContent className="p-6 text-sm">
@@ -65,10 +66,10 @@ export function ProfileCard({ user }: { user: any }) {
                 </div>
                 <Separator className="my-3" />
                 <div className="flex justify-between">
-                    <span>Email</span>
-                    <span className="font-medium">{user.email}</span>
+                    <span>Gender</span>
+                    <span className="font-medium capitalize">{user.gender}</span>
                 </div>
-                 <Separator className="my-3" />
+                <Separator className="my-3" />
                 <div className="flex justify-between">
                     <span>Contact</span>
                     <span className="font-medium">{user.contact}</span>
@@ -77,6 +78,16 @@ export function ProfileCard({ user }: { user: any }) {
                 <div className="flex justify-between">
                     <span>Parent's Contact</span>
                     <span className="font-medium">{user.parentContact}</span>
+                </div>
+                <Separator className="my-3" />
+                 <div className="flex justify-between">
+                    <span>Email</span>
+                    <span className="font-medium">{user.email}</span>
+                </div>
+                 <Separator className="my-3" />
+                 <div className="flex justify-between">
+                    <span>Address</span>
+                    <span className="font-medium">{user.city}, {user.state}</span>
                 </div>
                 <Separator className="my-3" />
                  <div className="flex items-center justify-between">
