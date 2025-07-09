@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { Shield } from 'lucide-react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useUser } from '@/context/UserContext';
-import { RequestAccessDialog } from '@/components/auth/request-access-dialog';
 
 const Illustration = () => (
     <div className="relative h-full w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-600 to-purple-800 p-8">
@@ -172,7 +171,9 @@ export default function ModernLoginPage() {
                         </Button>
 
                         <div className="text-center text-sm">
-                           <RequestAccessDialog />
+                           <Button variant="link" className="p-0 h-auto" asChild>
+                             <Link href="/register">Don't have an account? Register here</Link>
+                           </Button>
                         </div>
                         
                     </form>
