@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BarChart2, Bell, BookUser, CalendarClock, ClipboardList, FolderUp, Megaphone, UserCheck, Video, Upload, Trash2, FilePlus, Download } from "lucide-react";
+import { BarChart2, Bell, BookUser, CalendarClock, ClipboardList, FolderUp, Megaphone, UserCheck, Video, Upload, Trash2, FilePlus, Download, MessageSquare, Tag, Send } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
@@ -15,7 +15,8 @@ import { Separator } from '../ui/separator';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
-import { useUser, Teacher } from '@/context/UserContext';
+import { useUser, Teacher, Student, Announcement } from '@/context/UserContext';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const initialUpcomingClasses = [
     { time: "10:00 AM - 11:00 AM", subject: "Advanced Algorithms", class: "CS-301", type: "Theory" },
@@ -35,65 +36,71 @@ const initialStudyMaterials = [
     { id: 3, title: "React Hooks Cheatsheet.pdf", course: "CS-303L" },
 ];
 
-const initialAnnouncements = [
-    { id: 1, by: "Dr. Rajeev Menon", content: "Reminder: The deadline for the Final Project Proposal is approaching. Please submit it via the portal by August 25th.", time: "2h ago" },
-    { id: 2, by: "Dr. Meera Iyer", content: "I've uploaded the notes for today's lecture on NP-Completeness. You can find them in the study materials section.", time: "8h ago" },
-];
-
 export function FacultyDashboard({ user }: { user: Teacher }) {
-    const { students: allStudents } = useUser();
+    const { students, setStudents, announcements, setAnnouncements, logActivity } = useUser();
     const { toast } = useToast();
+    
+    const [assignedStudents, setAssignedStudents] = useState<Student[]>([]);
     const [assignments, setAssignments] = useState(initialAssignments);
     const [studyMaterials, setStudyMaterials] = useState(initialStudyMaterials);
-    const [announcements, setAnnouncements] = useState(initialAnnouncements);
     const [newAnnouncement, setNewAnnouncement] = useState("");
     const [attendanceList, setAttendanceList] = useState<any[]>([]);
 
-    useEffect(() => {
-        // Initialize local attendance state from the global student list
-        setAttendanceList(
-            allStudents.map(student => ({ ...student, present: Math.random() > 0.2 }))
-        );
-    }, [allStudents]);
+    const [isNoteDialogOpen, setNoteDialogOpen] = useState(false);
+    const [isTagDialogOpen, setTagDialogOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+    const [noteContent, setNoteContent] = useState('');
+    const [tagContent, setTagContent] = useState('');
 
-    const handlePostAnnouncement = () => {
+    useEffect(() => {
+        const myStudents = students.filter(s => s.teacherId === user.id);
+        setAssignedStudents(myStudents);
+        setAttendanceList(
+            myStudents.map(student => ({ ...student, present: Math.random() > 0.2 }))
+        );
+    }, [students, user.id]);
+
+    function handlePostAnnouncement() {
         if (!newAnnouncement.trim()) return;
-        const announcement = {
+        const announcement: Announcement = {
             id: Date.now(),
             by: user.name,
             content: newAnnouncement,
-            time: "Just now"
+            time: "Just now",
+            scope: 'teacher',
+            teacherId: user.id,
         };
-        setAnnouncements([announcement, ...announcements]);
+        setAnnouncements(prev => [announcement, ...prev]);
         setNewAnnouncement("");
-        toast({ title: "Announcement Posted!", description: "Your announcement is now live for all students." });
+        logActivity(user.name, `Posted announcement for their students.`);
+        toast({ title: "Announcement Posted!", description: "Your announcement is now live for your students." });
     };
 
-    const handleDeleteAssignment = (id: number) => {
+    function handleDeleteAssignment(id: number) {
         setAssignments(prev => prev.filter(a => a.id !== id));
         toast({ title: "Assignment Removed", variant: "destructive", description: "The assignment has been successfully deleted." });
     };
 
-    const handleDeleteMaterial = (id: number) => {
+    function handleDeleteMaterial(id: number) {
         setStudyMaterials(prev => prev.filter(m => m.id !== id));
         toast({ title: "Material Removed", variant: "destructive", description: "The study material has been successfully deleted." });
     };
 
-    const handleCreateAssignment = (e: React.FormEvent<HTMLFormElement>) => {
+    function handleCreateAssignment(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const newAssignment = {
             id: Date.now(),
             title: formData.get('title') as string,
             due: formData.get('due') as string,
-            submissions: `0/${allStudents.length}`
+            submissions: `0/${assignedStudents.length}`
         };
         setAssignments([...assignments, newAssignment]);
         toast({ title: "Assignment Created", description: `The assignment "${newAssignment.title}" has been created.` });
         document.getElementById('close-assignment-dialog')?.click();
     };
 
-    const handleUploadMaterial = (e: React.FormEvent<HTMLFormElement>) => {
+    function handleUploadMaterial(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const newMaterial = {
@@ -104,6 +111,46 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
         setStudyMaterials([...studyMaterials, newMaterial]);
         toast({ title: "Material Uploaded", description: `"${newMaterial.title}" is now available to students.` });
         document.getElementById('close-material-dialog')?.click();
+    }
+
+    function openNoteDialog(student: Student) {
+        setSelectedStudent(student);
+        setNoteContent('');
+        setNoteDialogOpen(true);
+    }
+
+    function openTagDialog(student: Student) {
+        setSelectedStudent(student);
+        setTagContent('');
+        setTagDialogOpen(true);
+    }
+
+    function handleSendNote() {
+        if (!selectedStudent || !noteContent.trim()) return;
+        setStudents(prev => prev.map(s => s.id === selectedStudent.id ? {
+            ...s,
+            notifications: [...s.notifications, {
+                id: Date.now(),
+                from: user.name,
+                message: noteContent,
+                read: false,
+                timestamp: new Date()
+            }]
+        } : s));
+        logActivity(user.name, `Sent a note to ${selectedStudent.name}`);
+        toast({ title: "Note Sent!", description: `Your note has been sent to ${selectedStudent.name}.`});
+        setNoteDialogOpen(false);
+    }
+
+    function handleAddTag() {
+        if (!selectedStudent || !tagContent.trim()) return;
+        setStudents(prev => prev.map(s => s.id === selectedStudent.id ? {
+            ...s,
+            tags: [...s.tags, tagContent]
+        } : s));
+        logActivity(user.name, `Tagged ${selectedStudent.name} with "${tagContent}"`);
+        toast({ title: "Tag Added!", description: `${selectedStudent.name} has been tagged.`});
+        setTagDialogOpen(false);
     }
     
     return (
@@ -144,19 +191,29 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card className="glass-card">
                         <CardHeader>
-                            <CardTitle className='flex items-center gap-2'><UserCheck className="w-5 h-5" /> Attendance Management</CardTitle>
-                            <CardDescription>Quick view & management for CS-301.</CardDescription>
+                            <CardTitle className='flex items-center gap-2'><UserCheck className="w-5 h-5" /> Assigned Students</CardTitle>
+                            <CardDescription>Manage and interact with your students.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="max-h-60 overflow-y-auto pr-2">
                                 <Table>
                                     <TableBody>
-                                        {attendanceList.slice(0, 4).map((s) => (
+                                        {assignedStudents.length > 0 ? assignedStudents.map((s) => (
                                             <TableRow key={s.id}>
                                                 <TableCell className="font-medium">{s.name}</TableCell>
-                                                <TableCell className='text-right'><Badge variant={s.present ? 'outline' : 'destructive'} className={s.present ? 'text-success border-success' : ''}>{s.present ? 'Present' : 'Absent'}</Badge></TableCell>
+                                                <TableCell className='text-right'>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="sm">Actions</Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem onClick={() => openNoteDialog(s)}><MessageSquare className="mr-2 h-4 w-4"/>Send Note</DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => openTagDialog(s)}><Tag className="mr-2 h-4 w-4"/>Add Tag</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
                                             </TableRow>
-                                        ))}
+                                        )) : <p className="text-sm text-center text-muted-foreground p-4">No students assigned yet.</p>}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -258,17 +315,8 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                         <CardTitle className='flex items-center gap-2'><Megaphone className="w-5 h-5" /> Post Announcement</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <Textarea placeholder="Type your announcement here..." value={newAnnouncement} onChange={(e) => setNewAnnouncement(e.target.value)} />
+                        <Textarea placeholder="Type your announcement for your students..." value={newAnnouncement} onChange={(e) => setNewAnnouncement(e.target.value)} />
                         <Button className='w-full' onClick={handlePostAnnouncement}>Post to Students</Button>
-                         <Separator />
-                        <div className='space-y-4 max-h-40 overflow-y-auto pr-2'>
-                            {announcements.map((an) => (
-                                <div key={an.id} className='text-sm p-2 rounded-md hover:bg-accent'>
-                                    <p className='text-muted-foreground'>{an.content}</p>
-                                    <p className='text-xs text-right font-medium'>- {an.by}, {an.time}</p>
-                                </div>
-                            ))}
-                        </div>
                     </CardContent>
                 </Card>
                 
@@ -313,29 +361,23 @@ export function FacultyDashboard({ user }: { user: Teacher }) {
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card className="glass-card">
-                    <CardHeader>
-                        <CardTitle className='flex items-center gap-2'><Upload className="w-5 h-5" /> Results & Marks Upload</CardTitle>
-                        <CardDescription>Upload semester-end marks for your courses.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Button className='w-full' variant='secondary' onClick={() => toast({ title: "Feature Coming Soon!", description: "Bulk mark upload will be enabled here." })}>
-                            Upload Marksheet
-                        </Button>
-                    </CardContent>
-                </Card>
-
-                <Card className="glass-card">
-                    <CardHeader>
-                        <CardTitle className='flex items-center gap-2'><BarChart2 className="w-5 h-5" /> Class Analytics</CardTitle>
-                        <CardDescription>Grade distribution for CS-201 (previous sem).</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <GradeDistributionChart results={[]} />
-                    </CardContent>
-                </Card>
             </div>
+            
+            {/* Dialogs for teacher actions */}
+            <Dialog open={isNoteDialogOpen} onOpenChange={setNoteDialogOpen}>
+                <DialogContent className="glass-card">
+                    <DialogHeader><DialogTitle>Send a Note to {selectedStudent?.name}</DialogTitle></DialogHeader>
+                    <Textarea placeholder="Type your private message here..." value={noteContent} onChange={(e) => setNoteContent(e.target.value)} />
+                    <DialogFooter><Button onClick={handleSendNote}>Send Note</Button></DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={isTagDialogOpen} onOpenChange={setTagDialogOpen}>
+                 <DialogContent className="glass-card">
+                    <DialogHeader><DialogTitle>Add a Tag for {selectedStudent?.name}</DialogTitle></DialogHeader>
+                    <Input placeholder="e.g., Needs Help, Backlog" value={tagContent} onChange={(e) => setTagContent(e.target.value)} />
+                    <DialogFooter><Button onClick={handleAddTag}>Add Tag</Button></DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -8,12 +8,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Download, Bell } from "lucide-react";
-import { useState } from "react";
+import { Download, Bell, UserSquare } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useUser, Teacher } from "@/context/UserContext";
 
 export function ProfileCard({ user }: { user: any }) {
     const { toast } = useToast();
+    const { teachers } = useUser();
     const [selectedCertificate, setSelectedCertificate] = useState("");
+    const [mentor, setMentor] = useState<Teacher | null>(null);
+
+     useEffect(() => {
+        if (user?.teacherId) {
+            const assignedMentor = teachers.find(t => t.id === user.teacherId);
+            setMentor(assignedMentor || null);
+        }
+    }, [user, teachers]);
 
     const handleRequestCertificate = () => {
         if (!selectedCertificate) {
@@ -58,8 +68,22 @@ export function ProfileCard({ user }: { user: any }) {
                      <Badge variant="secondary">Sem {user.semester}</Badge>
                      <Badge variant="secondary">Sec {user.section}</Badge>
                 </div>
+                {user.tags?.length > 0 && (
+                    <div className="flex gap-1 flex-wrap justify-center pt-2">
+                        {user.tags.map((tag: string) => <Badge key={tag} variant="destructive">{tag}</Badge>)}
+                    </div>
+                )}
             </CardHeader>
             <CardContent className="p-6 text-sm">
+                {mentor && (
+                    <>
+                        <div className="flex justify-between items-center">
+                             <span className="font-medium flex items-center gap-2"><UserSquare className="h-4 w-4" /> Assigned Mentor</span>
+                            <span className="font-medium">{mentor.name}</span>
+                        </div>
+                        <Separator className="my-3" />
+                    </>
+                )}
                 <div className="flex justify-between">
                     <span>Date of Birth</span>
                     <span className="font-medium">{user.dob}</span>

@@ -6,14 +6,10 @@ import { AlertTriangle, BookOpen, CheckCircle2, DollarSign, Megaphone } from "lu
 import { AttendanceChart } from "./charts";
 import { Separator } from "../ui/separator";
 import type { Student } from "@/context/UserContext";
-
-const announcements = [
-    { id: 1, by: "Dr. Rajeev Menon", content: "Reminder: The deadline for the Final Project Proposal is approaching. Please submit it via the portal by August 25th.", time: "2h ago" },
-    { id: 2, by: "Dr. Meera Iyer", content: "I've uploaded the notes for today's lecture on NP-Completeness. You can find them in the study materials section.", time: "8h ago" },
-    { id: 3, by: "University Admin", content: "The university will be closed on August 15th for Independence Day.", time: "1d ago" },
-]
+import { useUser } from "@/context/UserContext";
 
 export function DashboardOverview({ user }: { user: Student }) {
+    const { announcements } = useUser();
 
     const { academicHistory, fees } = user;
     const latestSemKey = `sem${user.semester - 1}`;
@@ -31,8 +27,17 @@ export function DashboardOverview({ user }: { user: Student }) {
         }).format(amount);
     };
 
+    const relevantAnnouncements = announcements.filter(an => 
+        an.scope === 'global' || (an.scope === 'teacher' && an.teacherId === user.teacherId)
+    );
+
     return (
         <div className="space-y-4">
+            <Card className="glass-card text-center p-6">
+                 <CardTitle className="text-3xl">Welcome back, {user.name.split(' ')[0]}!</CardTitle>
+                 <CardDescription>Here's a quick look at your academic dashboard.</CardDescription>
+            </Card>
+
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="glass-card">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -108,12 +113,14 @@ export function DashboardOverview({ user }: { user: Student }) {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4 max-h-40 overflow-y-auto pr-2">
-                             {announcements.map((an) => (
+                             {relevantAnnouncements.length > 0 ? relevantAnnouncements.map((an) => (
                                 <div key={an.id} className='text-sm p-2 rounded-md hover:bg-accent/50'>
                                     <p className='text-muted-foreground'>{an.content}</p>
                                     <p className='text-xs text-right font-medium'>- {an.by}, {an.time}</p>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-sm text-muted-foreground text-center">No new announcements.</p>
+                            )}
                         </div>
                     </CardContent>
                 </Card>

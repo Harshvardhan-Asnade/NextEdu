@@ -21,6 +21,22 @@ export interface PendingStudent {
     agreeTerms: boolean;
 }
 
+export interface Announcement {
+    id: number;
+    by: string;
+    content: string;
+    time: string;
+    scope: 'global' | 'teacher';
+    teacherId?: string;
+}
+
+export interface Activity {
+    id: number;
+    user: string;
+    action: string;
+    timestamp: Date;
+}
+
 export interface AttendanceSubject {
     name: string;
     type: "Theory" | "Practical";
@@ -86,6 +102,9 @@ export interface Student {
     semester: number;
     username: string;
     password: string;
+    teacherId: string | null;
+    tags: string[];
+    notifications: { id: number, message: string, read: boolean, from: string, timestamp: Date }[];
     academicHistory: {
         attendance: Record<string, AttendanceSemester>;
         results: Record<string, ResultsSemester>;
@@ -104,6 +123,7 @@ export interface Teacher {
     avatar: string;
     username: string;
     password: string;
+    subjects: string[];
 }
 
 interface UserContextType {
@@ -113,6 +133,10 @@ interface UserContextType {
     setTeachers: React.Dispatch<React.SetStateAction<Teacher[]>>;
     pendingStudents: PendingStudent[];
     setPendingStudents: React.Dispatch<React.SetStateAction<PendingStudent[]>>;
+    announcements: Announcement[];
+    setAnnouncements: React.Dispatch<React.SetStateAction<Announcement[]>>;
+    activityLog: Activity[];
+    logActivity: (user: string, action: string) => void;
 }
 
 export const feeData = {
@@ -179,19 +203,10 @@ const tomHollandFeeData = {
     history: feeData.history
 };
 
-
 const initialStudentsRaw = [
-    { id: "STU-DEMO", name: "Tom Holland", email: "tom.holland@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJnTwDDHJj8WLO4tNt0mCN6EPMhfFiLePcFw&s", dob: "01-06-1996", contact: "+44 1234567890", parentContact: "+44 1234567891", semester: 4, username: 'tom.holland', password: 'demo', gender: 'male', section: 'A', city: 'London', state: 'UK' },
-    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AP", dob: "12-05-2003", contact: "+91 9876543210", parentContact: "+91 9876543211", semester: 4, username: 'aarav.patel', password: 'password', gender: 'male', section: 'A', city: 'Mumbai', state: 'Maharashtra' },
-    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AS", dob: "22-08-2003", contact: "+91 9876543212", parentContact: "+91 9876543213", semester: 4, username: 'aditi.sharma', password: 'password', gender: 'female', section: 'B', city: 'Delhi', state: 'Delhi' },
-    { id: "STU-003", name: "Arjun Kumar", email: "arjun.kumar@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AK", dob: "05-11-2002", contact: "+91 9876543214", parentContact: "+91 9876543215", semester: 4, username: 'arjun.kumar', password: 'password', gender: 'male', section: 'A', city: 'Bangalore', state: 'Karnataka' },
-    { id: "STU-004", name: "Diya Singh", email: "diya.singh@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=DS", dob: "19-02-2003", contact: "+91 9876543216", parentContact: "+91 9876543217", semester: 3, username: 'diya.singh', password: 'password', gender: 'female', section: 'C', city: 'Kolkata', state: 'West Bengal' },
-    { id: "STU-005", name: "Ishaan Gupta", email: "ishaan.gupta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=IG", dob: "30-07-2003", contact: "+91 9876543218", parentContact: "+91 9876543219", semester: 3, username: 'ishaan.gupta', password: 'password', gender: 'male', section: 'B', city: 'Chennai', state: 'Tamil Nadu' },
-    { id: "STU-006", name: "Kavya Reddy", email: "kavya.reddy@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=KR", dob: "14-04-2003", contact: "+91 9876543220", parentContact: "+91 9876543221", semester: 4, username: 'kavya.reddy', password: 'password', gender: 'female', section: 'A', city: 'Hyderabad', state: 'Telangana' },
-    { id: "STU-007", name: "Mohammed Khan", email: "mohammed.khan@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=MK", dob: "25-09-2002", contact: "+91 9876543222", parentContact: "+91 9876543223", semester: 3, username: 'mohammed.khan', password: 'password', gender: 'male', section: 'C', city: 'Pune', state: 'Maharashtra' },
-    { id: "STU-008", name: "Myra Desai", email: "myra.desai@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=MD", dob: "08-12-2003", contact: "+91 9876543224", parentContact: "+91 9876543225", semester: 3, username: 'myra.desai', password: 'password', gender: 'female', section: 'B', city: 'Ahmedabad', state: 'Gujarat' },
-    { id: "STU-009", name: "Riya Verma", email: "riya.verma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=RV", dob: "03-01-2004", contact: "+91 9876543226", parentContact: "+91 9876543227", semester: 2, username: 'riya.verma', password: 'password', gender: 'female', section: 'A', city: 'Jaipur', state: 'Rajasthan' },
-    { id: "STU-010", name: "Rohan Mehta", email: "rohan.mehta@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=RM", dob: "18-06-2003", contact: "+91 9876543228", parentContact: "+91 9876543229", semester: 3, username: 'rohan.mehta', password: 'password', gender: 'male', section: 'C', city: 'Lucknow', state: 'Uttar Pradesh' },
+    { id: "STU-DEMO", name: "Tom Holland", email: "tom.holland@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJnTwDDHJj8WLO4tNt0mCN6EPMhfFiLePcFw&s", dob: "01-06-1996", contact: "+44 1234567890", parentContact: "+44 1234567891", semester: 4, username: 'tom.holland', password: 'demo', gender: 'male', section: 'A', city: 'London', state: 'UK', teacherId: 'FAC-DEMO', tags: ['Needs Help'], notifications: [{id: 1, from: "Admin", message: "Welcome to the new NextEdu portal!", read: false, timestamp: new Date()}] },
+    { id: "STU-001", name: "Aarav Patel", email: "aarav.patel@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AP", dob: "12-05-2003", contact: "+91 9876543210", parentContact: "+91 9876543211", semester: 4, username: 'aarav.patel', password: 'password', gender: 'male', section: 'A', city: 'Mumbai', state: 'Maharashtra', teacherId: 'FAC-001', tags: [], notifications: [] },
+    { id: "STU-002", name: "Aditi Sharma", email: "aditi.sharma@university.edu", course: "B.Tech CSE (AI/ML)", avatar: "https://placehold.co/100x100.png?text=AS", dob: "22-08-2003", contact: "+91 9876543212", parentContact: "+91 9876543213", semester: 4, username: 'aditi.sharma', password: 'password', gender: 'female', section: 'B', city: 'Delhi', state: 'Delhi', teacherId: 'FAC-001', tags: [], notifications: [] },
 ];
 
 const initialStudents: Student[] = initialStudentsRaw.map(student => {
@@ -206,15 +221,16 @@ const initialStudents: Student[] = initialStudentsRaw.map(student => {
         ...student,
         academicHistory: generateRandomHistory(student.semester),
         fees: feeData,
+        tags: student.tags || [],
+        notifications: student.notifications || [],
     };
 });
 
 
 const initialTeachers: Teacher[] = [
-    { id: "FAC-DEMO", name: "Dr. Robert Downey", email: "robert.downey@university.edu", department: "Computer Science", avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF34FgqdPjOKDhT-eSnttr_uUM33MT3DMbEJhzbD3brtHdZrGp7K_xJquf45K6btyihOs&usqp=CAU", username: 'robert.downey', password: 'demo' },
-    { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science", avatar: "https://placehold.co/100x100.png?text=MI", username: 'meera.iyer', password: 'password' },
-    { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence", avatar: "https://placehold.co/100x100.png?text=RM", username: 'rajeev.menon', password: 'password' },
-    { id: "FAC-003", name: "Prof. Sunita Sharma", email: "sunita.sharma@university.edu", department: "Machine Learning", avatar: "https://placehold.co/100x100.png?text=SS", username: 'sunita.sharma', password: 'password' },
+    { id: "FAC-DEMO", name: "Dr. Robert Downey", email: "robert.downey@university.edu", department: "Computer Science", avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF34FgqdPjOKDhT-eSnttr_uUM33MT3DMbEJhzbD3brtHdZrGp7K_xJquf45K6btyihOs&usqp=CAU", username: 'robert.downey', password: 'demo', subjects: ['CS-301', 'CS-302'] },
+    { id: "FAC-001", name: "Dr. Meera Iyer", email: "meera.iyer@university.edu", department: "Computer Science", avatar: "https://placehold.co/100x100.png?text=MI", username: 'meera.iyer', password: 'password', subjects: ['CS-303L', 'CS-304'] },
+    { id: "FAC-002", name: "Dr. Rajeev Menon", email: "rajeev.menon@university.edu", department: "Artificial Intelligence", avatar: "https://placehold.co/100x100.png?text=RM", username: 'rajeev.menon', password: 'password', subjects: ['AI-401'] },
 ];
 
 const initialPendingStudents: PendingStudent[] = [
@@ -239,103 +255,43 @@ const initialPendingStudents: PendingStudent[] = [
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [students, setStudents] = useState<Student[]>(() => {
-        if (typeof window === 'undefined') return initialStudents;
-        let loadedStudents: Student[] = [];
-        try {
-            const item = window.localStorage.getItem('students');
-            // Use initialStudents as a fallback if localStorage is empty or parsing fails
-            loadedStudents = item ? JSON.parse(item) : initialStudents;
-        } catch (error) {
-            console.error(error);
-            loadedStudents = initialStudents;
-        }
-
-        const demoStudent = initialStudents.find(s => s.id === 'STU-DEMO');
-        
-        // Ensure demo student is always present and up-to-date
-        if (demoStudent) {
-            const existingDemoIndex = loadedStudents.findIndex(s => s.id === 'STU-DEMO');
-            if (existingDemoIndex !== -1) {
-                loadedStudents[existingDemoIndex] = demoStudent; // Update in place
-            } else {
-                loadedStudents.unshift(demoStudent); // Add if not present
+    const useLocalStorage = <T,>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] => {
+        const [storedValue, setStoredValue] = useState<T>(() => {
+            if (typeof window === 'undefined') return initialValue;
+            try {
+                const item = window.localStorage.getItem(key);
+                return item ? JSON.parse(item, (k, v) => k === 'dob' || k === 'timestamp' ? new Date(v) : v) : initialValue;
+            } catch (error) {
+                console.error(error);
+                return initialValue;
             }
-        }
-        
-        return loadedStudents;
-    });
+        });
 
-    const [teachers, setTeachers] = useState<Teacher[]>(() => {
-        if (typeof window === 'undefined') return initialTeachers;
-        let loadedTeachers: Teacher[] = [];
-        try {
-            const item = window.localStorage.getItem('teachers');
-            loadedTeachers = item ? JSON.parse(item) : initialTeachers;
-        } catch (error) {
-            console.error(error);
-            loadedTeachers = initialTeachers;
-        }
-
-        const demoTeacher = initialTeachers.find(t => t.id === 'FAC-DEMO');
-
-        if (demoTeacher) {
-            const existingDemoIndex = loadedTeachers.findIndex(t => t.id === 'FAC-DEMO');
-            if (existingDemoIndex !== -1) {
-                loadedTeachers[existingDemoIndex] = demoTeacher; // Update
-            } else {
-                loadedTeachers.unshift(demoTeacher); // Add
+        useEffect(() => {
+            try {
+                window.localStorage.setItem(key, JSON.stringify(storedValue));
+            } catch (error) {
+                console.error(`Error setting localStorage key “${key}”:`, error);
             }
-        }
-        
-        return loadedTeachers;
-    });
+        }, [key, storedValue]);
 
-    const [pendingStudents, setPendingStudents] = useState<PendingStudent[]>(() => {
-        if (typeof window === 'undefined') return initialPendingStudents;
-        try {
-            const item = window.localStorage.getItem('pendingStudents');
-            if (item) {
-                const parsed = JSON.parse(item);
-                return parsed.map((p: any) => ({...p, dob: p.dob ? new Date(p.dob) : undefined, profilePhoto: p.profilePhoto || null }));
-            }
-            return initialPendingStudents;
-        } catch (error) {
-            console.error(error);
-            return initialPendingStudents;
-        }
-    });
+        return [storedValue, setStoredValue];
+    };
+    
+    const [students, setStudents] = useLocalStorage<Student[]>('students', initialStudents);
+    const [teachers, setTeachers] = useLocalStorage<Teacher[]>('teachers', initialTeachers);
+    const [pendingStudents, setPendingStudents] = useLocalStorage<PendingStudent[]>('pendingStudents', initialPendingStudents);
+    const [announcements, setAnnouncements] = useLocalStorage<Announcement[]>('announcements', []);
+    const [activityLog, setActivityLog] = useLocalStorage<Activity[]>('activityLog', []);
 
-    useEffect(() => {
-        try {
-            window.localStorage.setItem('students', JSON.stringify(students));
-        } catch (error) {
-            console.error('Failed to save students to localStorage', error);
-        }
-    }, [students]);
+    const logActivity = (user: string, action: string) => {
+        const newActivity: Activity = { id: Date.now(), user, action, timestamp: new Date() };
+        setActivityLog(prev => [newActivity, ...prev]);
+    };
 
-    useEffect(() => {
-        try {
-            window.localStorage.setItem('teachers', JSON.stringify(teachers));
-        } catch (error) {
-            console.error('Failed to save teachers to localStorage', error);
-        }
-    }, [teachers]);
-
-    useEffect(() => {
-        try {
-            const storablePending = pendingStudents.map(p => ({
-                ...p,
-                profilePhoto: p.profilePhoto,
-            }))
-            window.localStorage.setItem('pendingStudents', JSON.stringify(storablePending));
-        } catch (error) {
-            console.error('Failed to save pending students to localStorage', error);
-        }
-    }, [pendingStudents]);
 
     return (
-        <UserContext.Provider value={{ students, setStudents, teachers, setTeachers, pendingStudents, setPendingStudents }}>
+        <UserContext.Provider value={{ students, setStudents, teachers, setTeachers, pendingStudents, setPendingStudents, announcements, setAnnouncements, activityLog, logActivity }}>
             {children}
         </UserContext.Provider>
     );

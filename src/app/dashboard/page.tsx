@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid } from 'lucide-react';
+import { BarChart3, CreditCard, GraduationCap, Hexagon, LogOut, PanelLeft, Shield, LayoutGrid, Bell } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -20,6 +20,7 @@ import { AdminPanel } from '@/components/dashboard/admin-panel';
 import { cn } from '@/lib/utils';
 import { FacultyDashboard } from '@/components/dashboard/faculty-dashboard';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Chatbot } from '@/components/dashboard/chatbot';
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -170,6 +171,31 @@ export default function DashboardPage() {
         
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-end">
           <ThemeToggle />
+          {userRole === 'student' && (
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="relative rounded-full">
+                  <Bell className="h-5 w-5" />
+                  {user.notifications?.filter((n: any) => !n.read).length > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                    </span>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {user.notifications?.length > 0 ? user.notifications.map((n: any) => (
+                   <DropdownMenuItem key={n.id} className="flex flex-col items-start whitespace-normal">
+                     <p className='font-semibold'>From: {n.from}</p>
+                     <p className='text-muted-foreground'>{n.message}</p>
+                   </DropdownMenuItem>
+                )) : <DropdownMenuItem>No new notifications</DropdownMenuItem>}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <div className="flex-initial">
              <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -213,6 +239,7 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+        {userRole === 'student' && <Chatbot />}
       </main>
     </div>
   );
