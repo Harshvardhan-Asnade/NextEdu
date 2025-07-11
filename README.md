@@ -1,8 +1,4 @@
-Based on the design and content you've shown in the screenshots, here's a **modern, professional `README.md`** for your **NextEdu** repository – including badges, emoji sections, and tech stack icons to match your aesthetic:
 
----
-
-```markdown
 <h1 align="center">📚 NextEdu</h1>
 <p align="center">
   <i>Empowering Education Through Seamless Innovation and Impact</i>
@@ -63,7 +59,6 @@ This project simplifies the creation of educational platforms by offering a prod
 ## 📁 Folder Structure
 
 ```
-
 NextEdu/
 │
 ├── src/                  → App & UI components
@@ -77,8 +72,7 @@ NextEdu/
 ├── next.config.ts
 ├── tailwind.config.ts
 └── ...
-
-````
+```
 
 ---
 
@@ -88,21 +82,18 @@ NextEdu/
    ```bash
    git clone https://github.com/Harshvardhan-Asnade/NextEdu.git
    cd NextEdu
-````
+   ```
 
 2. **Install dependencies**
-
    ```bash
    npm install
    ```
 
 3. **Setup Firebase**
-
-   * Create a Firebase project
-   * Copy `.env.example` to `.env.local` and add your credentials
+   - Create a Firebase project
+   - Copy `.env.example` to `.env.local` and add your credentials
 
 4. **Start development**
-
    ```bash
    npm run dev
    ```
@@ -119,14 +110,14 @@ NextEdu/
 
 ## 💡 Contributing
 
-Pull requests are welcome!
+Pull requests are welcome!  
 To contribute:
 
-* Fork the repo
-* Create your feature branch (`git checkout -b feature/my-feature`)
-* Commit your changes (`git commit -m 'add feature'`)
-* Push to the branch (`git push origin feature/my-feature`)
-* Open a pull request
+- Fork the repo
+- Create your feature branch (`git checkout -b feature/my-feature`)
+- Commit your changes (`git commit -m 'add feature'`)
+- Push to the branch (`git push origin feature/my-feature`)
+- Open a pull request
 
 ---
 
@@ -137,9 +128,3 @@ This project is licensed under the **MIT License** — feel free to use, share, 
 ---
 
 > Made with ❤️ by [Harshvardhan Asnade](https://github.com/Harshvardhan-Asnade) | CSE (AI & ML), MP, India
-
-```
-
----
-
-
